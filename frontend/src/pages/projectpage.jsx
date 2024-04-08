@@ -15,7 +15,7 @@ const ProjectsPage = () => {
                 <h2 className="h2 section-title">Our Recent Projects</h2>
                 <p className="section-text"></p>
                 <ul className="grid-list">
-                    <li className="">
+                    <li className="flex ml-5 mr-5 mt-10">
                         <div className="project-card relative rounded-lg overflow-hidden">
                             <figure className="card-banner img-holder" style={{ '--width': '510', '--height': '700' }}>
                                 <img src={project1Image} width="510" height="700" loading="lazy" alt="Designing a better cinema experience" className="img-cover" />
