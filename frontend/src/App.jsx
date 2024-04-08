@@ -1,13 +1,27 @@
 // src/App.js
 
 import React from 'react';
-import HomePage from './components/homepage';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import HomePage from './pages/homepage';
+import ProjectsPage from './pages/projectpage';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <HomePage />
+  },
+  {
+    path: '/projects',
+    element: <ProjectsPage />
+  }
+])
 
 function App() {
   return (
-    <div className="App">
-      <HomePage />
-    </div>
+    <RouterProvider router={router} />
   );
 }
 
