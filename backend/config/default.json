@@ -1,0 +1,12 @@
+{
+  "jwtPrivateKey": "unpreppedKey",
+  "db": "mongodb://0.0.0.0/rnjdb-v1",
+  "port": "3900",
+  "requiresAuth": true,
+  "allowMailVerification": "true",
+  "COMPANY_EMAIL": "",
+  "COMPANY_PASSWORD": "",
+  "CLOUDINARY_NAME": "",
+  "CLOUDINARY_API_KEY": "",
+  "CLOUDINARY_API_SECRET": ""
+}

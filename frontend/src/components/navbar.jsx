@@ -36,7 +36,7 @@ export default function Navbar() {
           </li>
         </ul>
         <div className='flex items-center gap-2'>
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</button>
+        <a href="/login" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</a>
         <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Start Working</button>
         <CircleUserRound size={40}  className="text-white cursor-pointer"/>
         </div>
