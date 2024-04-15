@@ -43,10 +43,22 @@ const SignUp = ({ toggleForms }) => {
       } else {
         // Handle sign up error
         const data = await response.text();
-        console.log("Sign up result..... :", data);
-        setError(data);
-        alert("Error signing up: " + data);
-        console.error("Sign up failed:", response);
+        if (
+          data ==
+          "Account processing was succesfull. Please check your email for verification to complete this process..."
+        ) {
+          alert(
+            "Account processing was succesfull. Please check your email for verification to complete this process..."
+          );
+          handleFastLogin();
+
+          navigate("/");
+        } else {
+          console.log("Sign up result..... :", data);
+          setError(data);
+          alert("Error signing up: " + data);
+          console.error("Sign up failed:", response);
+        }
       }
     } catch (error) {
       alert("Error signing up: " + error.message);
@@ -85,14 +97,21 @@ const SignUp = ({ toggleForms }) => {
         navigate("/");
       } else {
         // Handle sign up error
-        const resultError = response.text();
+        const resultError = await response.text();
         setError(resultError);
-        alert("Error Loging you in: " + resultError);
+        console.log("errrrro......", resultError);
+        alert("Oops! " + resultError);
+        if (
+          resultError ==
+          "Account processing was succesfull. Please check your email for verification to complete this process..."
+        ) {
+          navigate("/");
+        }
         console.error("Login failed:", resultError);
       }
     } catch (error) {
       setError(error.message);
-      alert("Error Loging in: " + error.message);
+      alert("Oops! " + error.message);
       console.error("Error Loging in:", error.message);
     }
   };
@@ -208,9 +227,9 @@ const Login = ({ toggleForms }) => {
         body: JSON.stringify(requestBody),
       });
 
+      const token = await response.text();
       if (response.ok) {
         // Handle successful sign up
-        const token = await response.text();
         console.log("Login successful!", token);
         // Extract the token from the response
         // console.log("Token:", response.text());
@@ -223,7 +242,7 @@ const Login = ({ toggleForms }) => {
         navigate("/");
       } else {
         // Handle log in error
-        const resultError = response.text();
+        const resultError = token;
         setError(resultError);
         alert("Error Loging you in: " + resultError);
         console.error("Login failed:", resultError);
