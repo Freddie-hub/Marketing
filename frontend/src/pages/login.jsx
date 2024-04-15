@@ -74,9 +74,8 @@ const SignUp = ({ toggleForms }) => {
       if (response.ok) {
         // Handle successful sign up
         const token = await response.text();
-        console.log("Login successful!", token);
+        console.log("Login successful!");
         // Extract the token from the response
-        // console.log("Token:", response.text());
         const data = token;
 
         // Store the token in localStorage (or sessionStorage)
@@ -86,9 +85,10 @@ const SignUp = ({ toggleForms }) => {
         navigate("/");
       } else {
         // Handle sign up error
-        setError(response.text());
-        alert("Error Loging you in: " + response.text());
-        console.error("Login failed:", response);
+        const resultError = response.text();
+        setError(resultError);
+        alert("Error Loging you in: " + resultError);
+        console.error("Login failed:", resultError);
       }
     } catch (error) {
       setError(error.message);
@@ -222,10 +222,11 @@ const Login = ({ toggleForms }) => {
         setToken(data);
         navigate("/");
       } else {
-        // Handle sign up error
-        setError(response.text());
-        alert("Error Loging in: " + response.text());
-        console.error("Login failed:", response);
+        // Handle log in error
+        const resultError = response.text();
+        setError(resultError);
+        alert("Error Loging you in: " + resultError);
+        console.error("Login failed:", resultError);
       }
     } catch (error) {
       setError(error.message);
