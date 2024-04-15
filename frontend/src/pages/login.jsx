@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 // Sign Up Component
 const SignUp = ({ toggleForms }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [token, setToken] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-
-
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can add your logic to handle form submission
     const requestBody = {
@@ -23,20 +21,19 @@ const SignUp = ({ toggleForms }) => {
       password,
       firstName,
       lastName,
-      phoneNumber
+      phoneNumber,
     };
-  
-    try {
-      const response = await fetch('https://rnrclone.onrender.com/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
-  
-      if (response.ok) {
 
+    try {
+      const response = await fetch("https://rnrclone.onrender.com/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
         console.log("Sign up successful!");
         handleFastLogin();
         // navigate("/");
@@ -62,11 +59,10 @@ const SignUp = ({ toggleForms }) => {
           alert("Error signing up: " + data);
           console.error("Sign up failed:", response);
         }
-
       }
     } catch (error) {
-      alert('Error signing up: ' + error.message);
-      console.error('Error signing up:', error.message);
+      alert("Error signing up: " + error.message);
+      console.error("Error signing up:", error.message);
     }
   };
 
@@ -126,7 +122,6 @@ const SignUp = ({ toggleForms }) => {
         <h2 className="text-3xl font-semibold mb-4">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-
             <input
               type="text"
               placeholder="First Name"
@@ -170,15 +165,38 @@ const SignUp = ({ toggleForms }) => {
               onChange={(e) => setPassword(e.target.value.toString())}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
             />
-
           </div>
           <div className="flex items-center">
-            <input type="checkbox" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
-            <p className="text-sm text-gray-600">Accept <a href="#" className="text-blue-500 hover:underline">Terms and Conditions</a></p>
+            <input
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={() => setAcceptTerms(!acceptTerms)}
+              className="mr-2"
+            />
+            <p className="text-sm text-gray-600">
+              Accept{" "}
+              <a href="#" className="text-blue-500 hover:underline">
+                Terms and Conditions
+              </a>
+            </p>
           </div>
-          <button type="submit" disabled={!acceptTerms} className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Sign Up</button>
+          <button
+            type="submit"
+            disabled={!acceptTerms}
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+          >
+            Sign Up
+          </button>
         </form>
-        <p className="text-center mt-4">Already have an account? <button onClick={toggleForms} className="text-blue-500 hover:underline">Login</button></p>
+        <p className="text-center mt-4">
+          Already have an account?{" "}
+          <button
+            onClick={toggleForms}
+            className="text-blue-500 hover:underline"
+          >
+            Login
+          </button>
+        </p>
       </div>
     </div>
   );
@@ -186,27 +204,27 @@ const SignUp = ({ toggleForms }) => {
 
 // Login Component
 const Login = ({ toggleForms }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [token, setToken] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can add your logic to handle form submission
     const requestBody = {
       email,
-      password
+      password,
     };
-  
+
     try {
-      const response = await fetch('https://rnrclone.onrender.com/api/auth', {
-        method: 'POST',
+      const response = await fetch("https://rnrclone.onrender.com/api/auth", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       });
 
       const token = await response.text();
@@ -215,7 +233,7 @@ const Login = ({ toggleForms }) => {
         console.log("Login successful!", token);
 
         // Extract the token from the response
-        const data = await response.json();
+        const data = token;
 
         // Store the token in localStorage (or sessionStorage)
         localStorage.setItem("auth_token", data);
@@ -228,12 +246,11 @@ const Login = ({ toggleForms }) => {
         setError(resultError);
         alert("Error Loging you in: " + resultError);
         console.error("Login failed:", resultError);
-
       }
     } catch (error) {
       setError(error.message);
-      alert('Error Loging in: ' + error.message);
-      console.error('Error Loging in:', error.message);
+      alert("Error Loging in: " + error.message);
+      console.error("Error Loging in:", error.message);
     }
   };
 
@@ -259,12 +276,28 @@ const Login = ({ toggleForms }) => {
               onChange={(e) => setPassword(e.target.value.toString())}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
             />
-
           </div>
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Login</button>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+          >
+            Login
+          </button>
         </form>
-        <p className="text-center mt-4">Don't have an account? <button onClick={toggleForms} className="text-blue-500 hover:underline">Sign Up Now</button></p>
-        <p className="text-center"><a href="#" className="text-blue-500 hover:underline">Forgot Password?</a></p>
+        <p className="text-center mt-4">
+          Don't have an account?{" "}
+          <button
+            onClick={toggleForms}
+            className="text-blue-500 hover:underline"
+          >
+            Sign Up Now
+          </button>
+        </p>
+        <p className="text-center">
+          <a href="#" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </a>
+        </p>
       </div>
     </div>
   );
@@ -280,7 +313,11 @@ const Credentials = () => {
 
   return (
     <div>
-      {isSignUp ? <SignUp toggleForms={toggleForms} /> : <Login toggleForms={toggleForms} />}
+      {isSignUp ? (
+        <SignUp toggleForms={toggleForms} />
+      ) : (
+        <Login toggleForms={toggleForms} />
+      )}
     </div>
   );
 };
