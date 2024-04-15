@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import "./spinner.css";
 
 // Sign Up Component
 const SignUp = ({ toggleForms }) => {
@@ -9,12 +10,14 @@ const SignUp = ({ toggleForms }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState();
   const [error, setError] = useState();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     // Here you can add your logic to handle form submission
     const requestBody = {
       email,
@@ -53,16 +56,19 @@ const SignUp = ({ toggleForms }) => {
           handleFastLogin();
 
           navigate("/");
+          setIsLoading(false);
         } else {
           console.log("Sign up result..... :", data);
           setError(data);
           alert("Error signing up: " + data);
           console.error("Sign up failed:", response);
+          setIsLoading(false);
         }
       }
     } catch (error) {
       alert("Error signing up: " + error.message);
       console.error("Error signing up:", error.message);
+      setIsLoading(false);
     }
   };
 
@@ -195,6 +201,18 @@ const SignUp = ({ toggleForms }) => {
             className="text-blue-500 hover:underline"
           >
             Login
+            {isLoading && (
+              <div
+                className="spinner"
+                style={{
+                  border: "4px solid #f3f3f3",
+                  borderTop: "4px solid #007bff",
+                  borderRadius: "50%",
+                  width: "24px",
+                  height: "24px",
+                }}
+              ></div>
+            )}
           </button>
         </p>
       </div>
@@ -205,6 +223,7 @@ const SignUp = ({ toggleForms }) => {
 // Login Component
 const Login = ({ toggleForms }) => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [token, setToken] = useState();
   const [error, setError] = useState();
@@ -212,6 +231,7 @@ const Login = ({ toggleForms }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     // Here you can add your logic to handle form submission
     const requestBody = {
       email,
@@ -228,6 +248,7 @@ const Login = ({ toggleForms }) => {
       });
 
       const token = await response.text();
+
       if (response.ok) {
         // Handle successful sign up
         console.log("Login successful!", token);
@@ -240,22 +261,34 @@ const Login = ({ toggleForms }) => {
         // Update the token state
         setToken(data);
         navigate("/");
+        setIsLoading(false);
       } else {
         // Handle log in error
         const resultError = token;
         setError(resultError);
         alert("Error Loging you in: " + resultError);
         console.error("Login failed:", resultError);
+        setIsLoading(false);
       }
     } catch (error) {
       setError(error.message);
       alert("Error Loging in: " + error.message);
       console.error("Error Loging in:", error.message);
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen">
+        <div
+          style={{
+            height: "20vh",
+            width: "50%",
+          }}
+        ></div>
+      </div>
+
       <div className="max-w-md w-full">
         <h2 className="text-3xl font-semibold mb-4">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -280,8 +313,31 @@ const Login = ({ toggleForms }) => {
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Login
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              <p>Login</p>
+              {isLoading && (
+                <div
+                  className="spinner"
+                  style={{
+                    border: "4px solid #f3f3f3",
+                    borderTop: "4px solid #007bff",
+                    borderRadius: "50%",
+                    width: "24px",
+                    height: "24px",
+                  }}
+                ></div>
+              )}
+            </div>
           </button>
         </form>
         <p className="text-center mt-4">
