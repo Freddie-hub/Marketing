@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NavLink, useNavigate } from "react-router-dom";
 
 // Sign Up Component
 const SignUp = ({ toggleForms }) => {
@@ -8,6 +9,10 @@ const SignUp = ({ toggleForms }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [token, setToken] = useState();
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
 
 
   const handleSubmit = async(e) => {
@@ -22,7 +27,7 @@ const SignUp = ({ toggleForms }) => {
     };
   
     try {
-      const response = await fetch('http://localhost:3900/api/users', {
+      const response = await fetch('https://rnrclone.onrender.com/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -31,13 +36,21 @@ const SignUp = ({ toggleForms }) => {
       });
   
       if (response.ok) {
-        // Handle successful sign up
+
+
         console.log('Sign up successful!');
+        alert('Sign up successful!');
+
+        navigate("/login");
+
       } else {
         // Handle sign up error
-        console.error('Sign up failed:', response.statusText);
+        setError( response.text());
+        alert('Error signing up: ' +response.text());
+        console.error('Sign up failed:', response);
       }
     } catch (error) {
+      alert('Error signing up: ' + error.message);
       console.error('Error signing up:', error.message);
     }
   };
@@ -78,10 +91,49 @@ const SignUp = ({ toggleForms }) => {
 const Login = ({ toggleForms }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [token, setToken] = useState();
+  const [error, setError] = useState();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Here you can add your logic to handle login
+    // Here you can add your logic to handle form submission
+    const requestBody = {
+      email,
+      password
+    };
+  
+    try {
+      const response = await fetch('https://rnrclone.onrender.com/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+  
+      if (response.ok) {
+        // Handle successful sign up
+        console.log('Login successful!',response.body);
+        // Extract the token from the response
+        const data = await response.json();
+
+        // Store the token in localStorage (or sessionStorage)
+        localStorage.setItem("auth_token", data);
+        // Update the token state
+        setToken(data);
+        navigate("/");
+      } else {
+        // Handle sign up error
+        setError(response.text());
+        alert('Error Loging in: ' + response.text());
+        console.error('Login failed:', response);
+      }
+    } catch (error) {
+      setError(error.message);
+      alert('Error Loging in: ' + error.message);
+      console.error('Error Loging in:', error.message);
+    }
   };
 
   return (

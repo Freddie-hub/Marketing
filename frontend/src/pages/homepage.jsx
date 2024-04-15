@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, {  useEffect,useState } from 'react';
+import {useNavigate} from "react-router-dom";
 import BannerImage from "../assets/images/hero-banner.png"
 import Navbar from '../components/navbar';
 
 const HomePage = () => {
+    const [authToken, setAuthToken] = useState("");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if the token exists in localStorage
+        const authenticatedToken = localStorage.getItem("auth_token");
+        if (authenticatedToken) setAuthToken(authenticatedToken);
+        
+      }, []);
+
     return (
         <>
-            {/* Hero Section */}
-            <Navbar/>
+            <Navbar authToken = {authToken}/>
             <section className="section hero" id="home" aria-label="hero">
                 <div className="container flex justify-center items-center mx-auto my-8">
                     <div className="hero-content mr-8 ml-4">

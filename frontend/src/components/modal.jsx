@@ -9,9 +9,9 @@ export default function Modal({ children, innerText, modalClasses ,className}) {
         <div>
             <button className="text-white" onClick={() => setIsOpen(prev => !prev)}>{innerText}</button>
 
-            <div className={cn("hidden absolute top-20 px-4 py-2 bg-slate-50 border rounded-lg shadow w-fit",className, { "block": isOpen })}>
+            <div className={cn("hidden absolute top-20 px-4 py-2 bg-slate-300 border rounded-lg shadow w-fit",className, { "block": isOpen })}>
                 <div className="flex items-center">
-                    <button onClick={() => setIsOpen(false)} className="ml-auto border p-1 rounded-md text-gray-500"><X /></button>
+                    <button onClick={() => setIsOpen(false)} className="ml-auto border p-1 rounded-md text-slate-500"><X /></button>
                 </div>
 
                 <div className={cn("mt-4",modalClasses)}>
