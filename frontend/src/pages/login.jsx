@@ -37,21 +37,86 @@ const SignUp = ({ toggleForms }) => {
   
       if (response.ok) {
 
-
-        console.log('Sign up successful!');
-        alert('Sign up successful!');
-
-        navigate("/login");
-
+        console.log("Sign up successful!");
+        handleFastLogin();
+        // navigate("/");
+        alert(
+          "Sign up successful! Please check your email to verify your account."
+        );
       } else {
         // Handle sign up error
-        setError( response.text());
-        alert('Error signing up: ' +response.text());
-        console.error('Sign up failed:', response);
+        const data = await response.text();
+        if (
+          data ==
+          "Account processing was succesfull. Please check your email for verification to complete this process..."
+        ) {
+          alert(
+            "Account processing was succesfull. Please check your email for verification to complete this process..."
+          );
+          handleFastLogin();
+
+          navigate("/");
+        } else {
+          console.log("Sign up result..... :", data);
+          setError(data);
+          alert("Error signing up: " + data);
+          console.error("Sign up failed:", response);
+        }
+
       }
     } catch (error) {
       alert('Error signing up: ' + error.message);
       console.error('Error signing up:', error.message);
+    }
+  };
+
+  const handleFastLogin = async (e) => {
+    // e.preventDefault();
+    // Here you can add your logic to handle form submission
+    const requestBody = {
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch("https://rnrclone.onrender.com/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.ok) {
+        // Handle successful sign up
+        const token = await response.text();
+        console.log("Login successful!");
+        // Extract the token from the response
+        const data = token;
+
+        // Store the token in localStorage (or sessionStorage)
+        localStorage.setItem("auth_token", data);
+        // Update the token state
+        setToken(data);
+        navigate("/");
+      } else {
+        // Handle sign up error
+        const resultError = await response.text();
+        setError(resultError);
+        console.log("errrrro......", resultError);
+        alert("Oops! " + resultError);
+        if (
+          resultError ==
+          "Account processing was succesfull. Please check your email for verification to complete this process..."
+        ) {
+          navigate("/");
+        }
+        console.error("Login failed:", resultError);
+      }
+    } catch (error) {
+      setError(error.message);
+      alert("Oops! " + error.message);
+      console.error("Error Loging in:", error.message);
     }
   };
 
@@ -61,19 +126,51 @@ const SignUp = ({ toggleForms }) => {
         <h2 className="text-3xl font-semibold mb-4">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <input type="tel" placeholder="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="tel"
+              placeholder="Phone Number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
+
           </div>
           <div className="flex items-center">
             <input type="checkbox" checked={acceptTerms} onChange={() => setAcceptTerms(!acceptTerms)} className="mr-2" />
@@ -111,10 +208,12 @@ const Login = ({ toggleForms }) => {
         },
         body: JSON.stringify(requestBody)
       });
-  
+
+      const token = await response.text();
       if (response.ok) {
         // Handle successful sign up
-        console.log('Login successful!',response.body);
+        console.log("Login successful!", token);
+
         // Extract the token from the response
         const data = await response.json();
 
@@ -124,10 +223,12 @@ const Login = ({ toggleForms }) => {
         setToken(data);
         navigate("/");
       } else {
-        // Handle sign up error
-        setError(response.text());
-        alert('Error Loging in: ' + response.text());
-        console.error('Login failed:', response);
+        // Handle log in error
+        const resultError = token;
+        setError(resultError);
+        alert("Error Loging you in: " + resultError);
+        console.error("Login failed:", resultError);
+
       }
     } catch (error) {
       setError(error.message);
@@ -142,10 +243,23 @@ const Login = ({ toggleForms }) => {
         <h2 className="text-3xl font-semibold mb-4">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
           </div>
           <div>
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500" />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value.toString())}
+              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+            />
+
           </div>
           <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Login</button>
         </form>
