@@ -11,6 +11,53 @@ const HomePage = () => {
     // setAuthToken("");
     window.location.reload();
   };
+
+  const handleFetchUser = async () => {
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/me",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token":`${getSavedToken()}`
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Sign up successful!");
+        handleFastLogin();
+        // navigate("/");
+        alert(
+          "Sign up successful! Please check your email to verify your account."
+        );
+      } else {
+        // Handle sign up error
+        const data = await response.text();
+        if (
+          data ==
+          "Account processing was succesfull. Please check your email for verification to complete this process..."
+        ) {
+          alert(
+            "Account processing was succesfull. Please check your email for verification to complete this process..."
+          );
+          handleFastLogin();
+
+          navigate("/");
+        } else {
+          console.log("Sign up result..... :", data);
+          setError(data);
+          alert("Error signing up: " + data);
+          console.error("Sign up failed:", response);
+        }
+      }
+    } catch (error) {
+      alert("Error signing up: " + error.message);
+      console.error("Error signing up:", error.message);
+    }
+  };
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
@@ -58,5 +105,9 @@ const HomePage = () => {
     </>
   );
 };
+
+function getSavedToken() {
+  return localStorage.getItem("auth_token");
+}
 
 export default HomePage;
