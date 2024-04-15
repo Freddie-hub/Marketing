@@ -189,9 +189,20 @@ const SignUp = ({ toggleForms }) => {
           <button
             type="submit"
             disabled={!acceptTerms}
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            className={
+              isLoading
+                ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                : "w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            }
+            style={{
+              pointerEvents: isLoading ? "none" : "auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
             Sign Up
+            {isLoading && <AppLoader />}
           </button>
         </form>
         <p className="text-center mt-4">
@@ -201,22 +212,25 @@ const SignUp = ({ toggleForms }) => {
             className="text-blue-500 hover:underline"
           >
             Login
-            {isLoading && (
-              <div
-                className="spinner"
-                style={{
-                  border: "4px solid #f3f3f3",
-                  borderTop: "4px solid #007bff",
-                  borderRadius: "50%",
-                  width: "24px",
-                  height: "24px",
-                }}
-              ></div>
-            )}
           </button>
         </p>
       </div>
     </div>
+  );
+};
+
+const AppLoader = () => {
+  return (
+    <div
+      className="spinner"
+      style={{
+        border: "4px solid #f3f3f3",
+        borderTop: "4px solid #007bff",
+        borderRadius: "50%",
+        width: "24px",
+        height: "24px",
+      }}
+    ></div>
   );
 };
 
@@ -312,11 +326,16 @@ const Login = ({ toggleForms }) => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            className={
+              isLoading
+                ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                : "w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            }
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              pointerEvents: isLoading ? "none" : "auto",
             }}
           >
             <div
@@ -325,18 +344,7 @@ const Login = ({ toggleForms }) => {
               }}
             >
               <p>Login</p>
-              {isLoading && (
-                <div
-                  className="spinner"
-                  style={{
-                    border: "4px solid #f3f3f3",
-                    borderTop: "4px solid #007bff",
-                    borderRadius: "50%",
-                    width: "24px",
-                    height: "24px",
-                  }}
-                ></div>
-              )}
+              {isLoading && <AppLoader />}
             </div>
           </button>
         </form>
