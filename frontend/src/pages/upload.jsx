@@ -1,13 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
+import AppLoader from "../components/AppLoader";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
   const [views, setViews] = useState("");
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [balance, setBalance] = useState(0);
   const [screenshot, setScreenshot] = useState(null);
   const [error, setError] = useState("");
+  const [user, setUser] = useState();
+  const [authToken, setAuthToken] = useState();
+
+  useEffect(() => {
+    // Check if the token exists in localStorage
+    const authenticatedToken = localStorage.getItem("auth_token");
+    if (authenticatedToken) {
+      setAuthToken(authenticatedToken);
+    }
+  }, []);
+
+  const handleFetchUser = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/me",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("User fetch successful!", userData);
+        setUser(userData);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error fetching user:", data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error fetching user details: " + error.message);
+      console.error("Error fetching user details:", error.message);
+      setLoading(false);
+    }
+  };
 
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
@@ -26,8 +70,10 @@ const UploadPage = () => {
   };
 
   const handleUpload = async () => {
+    setLoading(true);
     if (!category || views === "") {
       setError("Please select category and enter valid views.");
+      setLoading(false);
       return;
     }
     setError("");
@@ -39,6 +85,7 @@ const UploadPage = () => {
 
     //make API call to upload
     try {
+      console.log("Uploading...", category, " Views: ", views);
       const response = await fetch(
         "https://rnrclone.onrender.com/api/users/updateWallet",
         {
@@ -54,18 +101,33 @@ const UploadPage = () => {
       setResult(data);
       if (response.ok) {
         // Clear inputs
+        alert("Operation successful!");
         setCategory("");
         setViews("");
         setScreenshot(null);
+        setLoading(false);
       } else {
+        setResult(null);
         alert(data.message);
+        setLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      setResult(null);
+      alert(
+        "Oops! An error occurred while saving views data: " + error.message
+      );
+      setLoading(false);
+    }
+  };
+  const handleLogOut = () => {
+    localStorage.removeItem("auth_token");
+    // setAuthToken("");
+    window.location.reload();
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md">
         <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -120,13 +182,24 @@ const UploadPage = () => {
         </div>
         <button
           onClick={handleUpload}
-          className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+          className={
+            loading
+              ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+              : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+          }
+          style={{
+            pointerEvents: loading ? "none" : "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           Upload
+          {loading && <AppLoader />}
         </button>
         <div className="mt-6">
           <h2 className="text-xl font-semibold">
-            Wallet Balance: {balance} Ksh
+            Wallet Balance: {result ? result.walletBalance : 0} Ksh
           </h2>
         </div>
       </div>

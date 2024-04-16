@@ -5,12 +5,10 @@ import AppLoader from "./AppLoader";
 
 export default function Navbar({ authToken, handleLogOut }) {
   //make state for showing User Profile
-  const [user, setUser] = useState();
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [loading, setLoading] = useState(false);
-  const handleToggleUserProfile = (isOn) => {
-    setShowUserProfile(isOn);
-  };
+  const [user, setUser] = useState();
+
   const handleFetchUser = async () => {
     setLoading(true);
     try {
@@ -42,6 +40,34 @@ export default function Navbar({ authToken, handleLogOut }) {
       setLoading(false);
     }
   };
+
+  const handleToggleUserProfile = (isOn) => {
+    setShowUserProfile(isOn);
+  };
+
+  const isUserAbleToStartWorking = () => {
+    if (authToken) {
+      return (
+        <a
+          href="/upload"
+          className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Start Working
+        </a>
+      );
+    } else {
+      return (
+        <a
+          href="/login"
+          className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+        >
+          {" "}
+          Login To Start Working
+        </a>
+      );
+    }
+  };
+
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
@@ -320,12 +346,8 @@ export default function Navbar({ authToken, handleLogOut }) {
             handleLogOut={handleLogOut}
           />
           {/* <a href="/login" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</a> */}
-          <a
-            href="/upload"
-            className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Start Working
-          </a>
+          {isUserAbleToStartWorking()}
+
           <div
             className=""
             onClick={() => handleToggleUserProfile(true)}
