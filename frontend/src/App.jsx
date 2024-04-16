@@ -10,6 +10,7 @@ import Service from './pages/servicepage';
 import AboutSection from './pages/about';
 import ContactSection from './pages/contact';
 import Credentials from './pages/login';
+import UploadPage from './pages/upload';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/login', 
     element: <Credentials/>
+  },
+  {
+    path: '/upload', 
+    element: <UploadPage/>
   },
 
 ]);

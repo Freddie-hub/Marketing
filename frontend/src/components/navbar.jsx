@@ -275,9 +275,9 @@ export default function Navbar({ authToken, handleLogOut }) {
             handleLogOut={handleLogOut}
           />
           {/* <a href="/login" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</a> */}
-          <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+          <a href="/upload" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
             Start Working
-          </button>
+          </a>
           <CircleUserRound size={40} className="text-white cursor-pointer" />
         </div>
       </div>
@@ -292,7 +292,7 @@ function TheRightButtonGenerator({ token, handleLogOut }) {
         onClick={handleLogOut}
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
       >
-        LogOut
+        Logout
       </button>
     );
   } else {
