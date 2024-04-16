@@ -1,8 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "./modal";
 import { CircleUserRound } from "lucide-react";
+import AppLoader from "./AppLoader";
 
 export default function Navbar({ authToken, handleLogOut }) {
+  //make state for showing User Profile
+  const [user, setUser] = useState();
+  const [showUserProfile, setShowUserProfile] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const handleToggleUserProfile = (isOn) => {
+    setShowUserProfile(isOn);
+  };
+  const handleFetchUser = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/me",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("User fetch successful!", userData);
+        setUser(userData);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error fetching user:", data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error fetching user details: " + error.message);
+      console.error("Error fetching user details:", error.message);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    // Check if the token exists in localStorage
+    const authenticatedToken = localStorage.getItem("auth_token");
+    if (authenticatedToken) handleFetchUser();
+  }, []);
+
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -275,10 +320,99 @@ export default function Navbar({ authToken, handleLogOut }) {
             handleLogOut={handleLogOut}
           />
           {/* <a href="/login" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Login</a> */}
-          <a href="/upload" className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+          <a
+            href="/upload"
+            className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+          >
             Start Working
           </a>
-          <CircleUserRound size={40} className="text-white cursor-pointer" />
+          <div
+            className=""
+            onClick={() => handleToggleUserProfile(true)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+            <CircleUserRound size={40} className="text-white cursor-pointer" />
+            {showUserProfile == true && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "8.1vh",
+                  right: "0",
+                  backgroundColor: "white",
+                  width: "20rem",
+                  minHeight: "20vh",
+                  // height: "20vh",
+                  borderRadius: "4%",
+                  //make a shadow
+                  boxShadow:
+                    "0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)",
+                  //center things
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleToggleUserProfile(false);
+                }}
+              >
+                <div
+                  className="text-black"
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    right: "0",
+                    cursor: "pointer",
+                    padding: "0.5rem",
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+                {loading && <AppLoader />}
+                {user != null && (
+                  <ul>
+                    <li>
+                      <p className="text-black">Email: {user.email}</p>
+                    </li>
+                    <li>
+                      <p className="text-black">
+                        FirstName: {user.firstName} {user.lastName}
+                      </p>
+                    </li>
+                    <li>
+                      <p className="text-black">
+                        PhoneNumber: {user.phoneNumber}
+                      </p>
+                    </li>
+                  </ul>
+                )}
+                {user == null && (
+                  <p className="text-black">
+                    You need to log in or sign up first!
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>
@@ -305,4 +439,7 @@ function TheRightButtonGenerator({ token, handleLogOut }) {
       </a>
     );
   }
+}
+function getSavedToken() {
+  return localStorage.getItem("auth_token");
 }
