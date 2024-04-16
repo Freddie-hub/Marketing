@@ -403,6 +403,11 @@ export default function Navbar({ authToken, handleLogOut }) {
                         PhoneNumber: {user.phoneNumber}
                       </p>
                     </li>
+                    <li>
+                      <p className="text-black">
+                        WalletBalance: {user.walletBalance}
+                      </p>
+                    </li>
                   </ul>
                 )}
                 {user == null && (
