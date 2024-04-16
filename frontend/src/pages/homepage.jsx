@@ -5,6 +5,7 @@ import Navbar from "../components/navbar";
 
 const HomePage = () => {
   const [authToken, setAuthToken] = useState("");
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
@@ -20,48 +21,30 @@ const HomePage = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token":`${getSavedToken()}`
+            "x-auth-token": `${getSavedToken()}`,
           },
-          body: JSON.stringify(requestBody),
         }
       );
 
       if (response.ok) {
-        console.log("Sign up successful!");
-        handleFastLogin();
-        // navigate("/");
-        alert(
-          "Sign up successful! Please check your email to verify your account."
-        );
+        const userData = await response.json();
+        console.log("User fetch successful!", userData);
+        setUser(userData);
       } else {
-        // Handle sign up error
+        // Handle fetch user error
         const data = await response.text();
-        if (
-          data ==
-          "Account processing was succesfull. Please check your email for verification to complete this process..."
-        ) {
-          alert(
-            "Account processing was succesfull. Please check your email for verification to complete this process..."
-          );
-          handleFastLogin();
-
-          navigate("/");
-        } else {
-          console.log("Sign up result..... :", data);
-          setError(data);
-          alert("Error signing up: " + data);
-          console.error("Sign up failed:", response);
-        }
+        console.error("Error fetching user:", data);
       }
     } catch (error) {
-      alert("Error signing up: " + error.message);
-      console.error("Error signing up:", error.message);
+      alert("Error fetching user details: " + error.message);
+      console.error("Error fetching user details:", error.message);
     }
   };
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) setAuthToken(authenticatedToken);
+    if (authenticatedToken) handleFetchUser();
   }, []);
 
   return (
@@ -71,7 +54,9 @@ const HomePage = () => {
         <div className="container flex justify-center items-center mx-auto my-8">
           <div className="hero-content mr-8 ml-4">
             <p className="hero-subtitle text-xl text-gray-600 mb-4">
-              Rosemary and Jared Group
+              {user.firstName
+                ? `Welcome, ${user.firstName}`
+                : "Rosemary and Jared Group"}
             </p>
             <h1 className="h1 hero-title text-3xl md:text-5xl font-bold text-gray-900 mb-4">
               The power of Personalized Marketing
