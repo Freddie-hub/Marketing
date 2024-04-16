@@ -293,9 +293,9 @@ const Login = ({ toggleForms }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-md w-full">
-        <h2 className="text-3xl font-semibold mb-4">Login</h2>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-400 to-green-400">
+      <div className="max-w-md w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 transform transition duration-500 ease-in-out hover:scale-105">
+        <h2 className="text-3xl font-semibold mb-4 text-center">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
