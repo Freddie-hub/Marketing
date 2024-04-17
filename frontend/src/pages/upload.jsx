@@ -18,8 +18,51 @@ const UploadPage = () => {
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) {
       setAuthToken(authenticatedToken);
+      handleFetchUser();
     }
   }, []);
+  const formatPhoneNumber = (phoneNumber) => {
+    // Remove the initial zero if present
+    const trimmedNumber = phoneNumber.replace(/^0/, "");
+
+    // Append '254' at the start
+    const formattedNumber = "254" + trimmedNumber;
+
+    return formattedNumber;
+  };
+
+  const handleTriggerStk = async () => {
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/stkPush",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+          body: JSON.stringify({
+            ClientPhoneNumber: formatPhoneNumber(user.phoneNumber),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Stk successful!");
+        const userData = await response.json();
+        console.log("Stk successful!", userData);
+      } else {
+        console.log("Stk Flopped!");
+        // Handle fetch user error
+        const data = await response.text();
+        console.log("Error on stk push:", data);
+      }
+    } catch (error) {
+      console.log("Stk Flopped!", error.message);
+      console.error("Error on stk push:", error.message);
+      alert("Erroron stk push: " + error.message);
+    }
+  };
 
   const handleFetchUser = async () => {
     setLoading(true);
@@ -194,13 +237,22 @@ const UploadPage = () => {
             alignItems: "center",
           }}
         >
-          Upload
+          {loading ? "Loading...  " : "Upload"}
+
           {loading && <AppLoader />}
         </button>
         <div className="mt-6">
-          <h2 className="text-xl font-semibold">
-            Wallet Balance: {result ? result.walletBalance : 0} Ksh
-          </h2>
+          {result && result.message && user.walletBalance == undefined && (
+            <h2 className="text-xl font-semibold">
+              Wallet Balance: {result ? result.walletBalance : 0} Ksh
+            </h2>
+          )}
+          {user && user.walletBalance && (
+            <h2 className="text-xl font-semibold">
+              {" "}
+              Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
+            </h2>
+          )}
         </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
@@ -211,5 +263,7 @@ const UploadPage = () => {
     </>
   );
 };
-
+function getSavedToken() {
+  return localStorage.getItem("auth_token");
+}
 export default UploadPage;
