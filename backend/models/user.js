@@ -52,6 +52,10 @@ const userSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 
   password: {
     type: String,
@@ -63,6 +67,18 @@ const userSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false,
+  },
+  IsPaid: {
+    type: Boolean,
+    default: false,
+  },
+  IsEligibleToWork: {
+    type: Boolean,
+    default: false,
+  },
+  walletBalance: {
+    type: Number,
+    default: 0,
   },
 });
 

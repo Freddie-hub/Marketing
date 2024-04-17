@@ -1,6 +1,6 @@
 {
   "jwtPrivateKey": "unpreppedKey",
-  "db": "mongodb://0.0.0.0/rnjdb-v1",
+  "db": "mongodb+srv://randjgroup:RandJ@cluster0.g0ostwe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   "port": "3900",
   "requiresAuth": true,
   "allowMailVerification": "true",

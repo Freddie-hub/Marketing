@@ -1,4 +1,4 @@
-const emailMarkup = (referalCode, url, _id, uniqueString, token) => `
+const emailMarkup = (referalCode, url, _id, uniqueString, token, firstName) => `
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,7 +54,7 @@ const emailMarkup = (referalCode, url, _id, uniqueString, token) => `
     </div>
     <div style="width: 100%; padding: 0 5vw 0;">
       <h5 style="width: 60%; color: #3e2115; font-weight: 300; font-size: 12;">
-        Hello, User Name
+        Hello, ${firstName}
       </h5>
       <div style="width: 100%;">
         <p style="font-weight: 700; color: #3e2115;">

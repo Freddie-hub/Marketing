@@ -19,7 +19,7 @@ transporter.verify((error, success) => {
     : console.log("Mail Server Operationality : ", success);
 });
 
-const sendEmail = async ({ _id, email }, res, token) => {
+const sendEmail = async ({ _id, email, firstName }, res, token) => {
   const url = config.get("LIVE_URL");
 
   const salt = await bcrypt.genSalt(10);
@@ -29,7 +29,7 @@ const sendEmail = async ({ _id, email }, res, token) => {
     from: config.get("COMPANY_EMAIL"),
     to: email,
     subject: "Verify Your Email",
-    html: emailMarkup(url, _id, uniqueString, token),
+    html: emailMarkup(url, _id, uniqueString, token, firstName),
   };
   const hashedString = await bcrypt.hash(uniqueString, salt);
 
