@@ -6,6 +6,7 @@ const UploadPage = () => {
   const [category, setCategory] = useState("");
   const [views, setViews] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mpesaloading, setMpesaLoading] = useState(false);
   const [result, setResult] = useState();
   const [balance, setBalance] = useState(0);
   const [screenshot, setScreenshot] = useState(null);
@@ -32,7 +33,11 @@ const UploadPage = () => {
   };
 
   const handleTriggerStk = async () => {
+    setMpesaLoading(true);
+    console.log("Triggering STK called............");
     try {
+      const clientPhoneNumber = formatPhoneNumber(user.phoneNumber);
+      console.log("User Number...........", clientPhoneNumber);
       const response = await fetch(
         "https://rnrclone.onrender.com/api/users/stkPush",
         {
@@ -42,7 +47,7 @@ const UploadPage = () => {
             "x-auth-token": `${getSavedToken()}`,
           },
           body: JSON.stringify({
-            ClientPhoneNumber: formatPhoneNumber(user.phoneNumber),
+            ClientPhoneNumber: clientPhoneNumber,
           }),
         }
       );
@@ -51,16 +56,23 @@ const UploadPage = () => {
         console.log("Stk successful!");
         const userData = await response.json();
         console.log("Stk successful!", userData);
+        setMpesaLoading(false);
       } else {
         console.log("Stk Flopped!");
         // Handle fetch user error
         const data = await response.text();
         console.log("Error on stk push:", data);
+        if (data.includes("503"))
+          alert(
+            "Oops! Seems Mpesa service is currently unavailable. Please try again later."
+          );
+        setMpesaLoading(false);
       }
     } catch (error) {
       console.log("Stk Flopped!", error.message);
       console.error("Error on stk push:", error.message);
       alert("Erroron stk push: " + error.message);
+      setMpesaLoading(false);
     }
   };
 
@@ -140,9 +152,9 @@ const UploadPage = () => {
           body: JSON.stringify({ category, views }),
         }
       );
-      const data = await response.json();
-      setResult(data);
       if (response.ok) {
+        const data = await response.json();
+        setResult(data);
         // Clear inputs
         alert("Operation successful!");
         setCategory("");
@@ -150,9 +162,16 @@ const UploadPage = () => {
         setScreenshot(null);
         setLoading(false);
       } else {
+        const data = await response.text();
         setResult(null);
-        alert(data.message);
+        alert(data);
         setLoading(false);
+        if (
+          data ==
+          "You need to pay for subscription first. You will receive a pop up on your phone to pay for subscription. Once you pay, you will be able to start working."
+        ) {
+          handleTriggerStk();
+        }
       }
     } catch (error) {
       setResult(null);
@@ -169,9 +188,23 @@ const UploadPage = () => {
   };
 
   return (
-    <>
+    <div className="relative">
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
-      <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md">
+      {mpesaloading && (
+        <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
+          <div className="flex flex-col items-center justify-center w-full">
+            <h1 className="text-4xl font-semibold text-center">
+              We've sent a request to Mpesa
+            </h1>
+            <p className="text-xl font-semibold text-center">
+              Once the request is processed you will be able to pay and start
+              working.
+            </p>
+            {mpesaloading && <AppLoader />}
+          </div>
+        </div>
+      )}
+      <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md z-1">
         <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
@@ -260,7 +293,7 @@ const UploadPage = () => {
           &copy; {new Date().getFullYear()} R and J Group. All rights reserved.
         </p>
       </footer>
-    </>
+    </div>
   );
 };
 function getSavedToken() {

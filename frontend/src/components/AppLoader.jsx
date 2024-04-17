@@ -10,6 +10,7 @@ function AppLoader() {
         borderRadius: "50%",
         width: "24px",
         height: "24px",
+        zIndex: 1,
       }}
     ></div>
   );
