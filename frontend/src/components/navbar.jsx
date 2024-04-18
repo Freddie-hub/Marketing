@@ -458,12 +458,13 @@ function TheRightButtonGenerator({ token, handleLogOut }) {
     );
   } else {
     return (
-      <a
-        href="/login"
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Login
-      </a>
+      <div />
+      // <a
+      //   href="/login"
+      //   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      // >
+      //   Login
+      // </a>
     );
   }
 }

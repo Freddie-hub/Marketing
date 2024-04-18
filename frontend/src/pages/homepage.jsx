@@ -70,7 +70,7 @@ const HomePage = () => {
       if (response.ok) {
         const userData = await response.json();
         console.log("User fetch successful!", userData);
-        handleTriggerStk(userData.phoneNumber);
+        // handleTriggerStk(userData.phoneNumber);
         setUser(userData);
       } else {
         // Handle fetch user error
@@ -86,7 +86,7 @@ const HomePage = () => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) setAuthToken(authenticatedToken);
-    if (authenticatedToken) handleFetchUser();
+    // if (authenticatedToken) handleFetchUser();
   }, []);
 
   return (
