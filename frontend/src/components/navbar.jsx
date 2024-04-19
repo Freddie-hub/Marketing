@@ -62,7 +62,7 @@ export default function Navbar({ authToken, handleLogOut }) {
           className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
         >
           {" "}
-          Login To Start Working
+          Start Working
         </a>
       );
     }
@@ -360,25 +360,8 @@ export default function Navbar({ authToken, handleLogOut }) {
           >
             <CircleUserRound size={40} className="text-white cursor-pointer" />
             {showUserProfile == true && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "8.1vh",
-                  right: "0",
-                  backgroundColor: "white",
-                  width: "20rem",
-                  minHeight: "20vh",
-                  // height: "20vh",
-                  borderRadius: "4%",
-                  //make a shadow
-                  boxShadow:
-                    "0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06)",
-                  //center things
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+              <div className="absolute bg-blue-100 top-14 right-0 w-80 min-h-20vh rounded shadow-md flex center border border-solid border-orange-500"
+
                 onClick={(e) => {
                   e.stopPropagation();
                   handleToggleUserProfile(false);
@@ -394,9 +377,9 @@ export default function Navbar({ authToken, handleLogOut }) {
                     padding: "0.5rem",
                   }}
                 >
-                  <svg
+                  <svg 
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-6 w-6 border border-solid bg-blue-200 border-orange-600 rounded"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -411,23 +394,23 @@ export default function Navbar({ authToken, handleLogOut }) {
                 </div>
                 {loading && <AppLoader />}
                 {user != null && (
-                  <ul>
+                  <ul className="ml-5 mt-3 mb-5 padding-5 " >
                     <li>
                       <p className="text-black">Email: {user.email}</p>
                     </li>
                     <li>
                       <p className="text-black">
-                        FirstName: {user.firstName} {user.lastName}
+                       Name: {user.firstName} {user.lastName}
                       </p>
                     </li>
                     <li>
                       <p className="text-black">
-                        PhoneNumber: {user.phoneNumber}
+                        Phone Number: {user.phoneNumber}
                       </p>
                     </li>
                     <li>
                       <p className="text-black">
-                        WalletBalance: {user.walletBalance}
+                        Wallet Balance: {user.walletBalance}
                       </p>
                     </li>
                   </ul>
