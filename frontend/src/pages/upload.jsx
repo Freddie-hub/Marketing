@@ -6,6 +6,7 @@ const UploadPage = () => {
   const [category, setCategory] = useState("");
   const [views, setViews] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mpesaloading, setMpesaLoading] = useState(false);
   const [result, setResult] = useState();
   const [balance, setBalance] = useState(0);
   const [screenshot, setScreenshot] = useState(null);
@@ -18,8 +19,62 @@ const UploadPage = () => {
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) {
       setAuthToken(authenticatedToken);
+      handleFetchUser();
     }
   }, []);
+  const formatPhoneNumber = (phoneNumber) => {
+    // Remove the initial zero if present
+    const trimmedNumber = phoneNumber.replace(/^0/, "");
+
+    // Append '254' at the start
+    const formattedNumber = "254" + trimmedNumber;
+
+    return formattedNumber;
+  };
+
+  const handleTriggerStk = async () => {
+    setMpesaLoading(true);
+    console.log("Triggering STK called............");
+    try {
+      const clientPhoneNumber = formatPhoneNumber(user.phoneNumber);
+      console.log("User Number...........", clientPhoneNumber);
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/stkPush",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+          body: JSON.stringify({
+            ClientPhoneNumber: clientPhoneNumber,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Stk successful!");
+        const userData = await response.json();
+        console.log("Stk successful!", userData);
+        setMpesaLoading(false);
+      } else {
+        console.log("Stk Flopped!");
+        // Handle fetch user error
+        const data = await response.text();
+        console.log("Error on stk push:", data);
+        if (data.includes("503"))
+          alert(
+            "Oops! Seems Mpesa service is currently unavailable. Please try again later."
+          );
+        setMpesaLoading(false);
+      }
+    } catch (error) {
+      console.log("Stk Flopped!", error.message);
+      console.error("Error on stk push:", error.message);
+      alert("Erroron stk push: " + error.message);
+      setMpesaLoading(false);
+    }
+  };
 
   const handleFetchUser = async () => {
     setLoading(true);
@@ -97,9 +152,9 @@ const UploadPage = () => {
           body: JSON.stringify({ category, views }),
         }
       );
-      const data = await response.json();
-      setResult(data);
       if (response.ok) {
+        const data = await response.json();
+        setResult(data);
         // Clear inputs
         alert("Operation successful!");
         setCategory("");
@@ -107,9 +162,16 @@ const UploadPage = () => {
         setScreenshot(null);
         setLoading(false);
       } else {
+        const data = await response.text();
         setResult(null);
-        alert(data.message);
+        alert(data);
         setLoading(false);
+        if (
+          data ==
+          "You need to pay for subscription first. You will receive a pop up on your phone to pay for subscription. Once you pay, you will be able to start working."
+        ) {
+          handleTriggerStk();
+        }
       }
     } catch (error) {
       setResult(null);
@@ -126,9 +188,28 @@ const UploadPage = () => {
   };
 
   return (
-    <>
+    <div className="relative">
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
-      <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md">
+      {mpesaloading && (
+        <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
+          <div className="flex flex-col items-center justify-center w-full">
+            <h1 className="text-4xl font-semibold text-center">
+              We've sent a request to Mpesa
+            </h1>
+            <p className="text-xl font-semibold text-center">
+              Once the request is processed you will be able to pay and start
+              working.
+            </p>
+            {mpesaloading && <AppLoader />}
+          </div>
+        </div>
+      )}
+      <p className="hero-subtitle text-xl text-gray-600 mb-4">
+        {user.firstName
+          ? `Welcome, ${user.firstName}`
+          : "Rosemary and Jared Group"}
+      </p>
+      <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md z-1">
         <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">
@@ -194,13 +275,22 @@ const UploadPage = () => {
             alignItems: "center",
           }}
         >
-          Upload
+          {loading ? "Loading...  " : "Upload"}
+
           {loading && <AppLoader />}
         </button>
         <div className="mt-6">
-          <h2 className="text-xl font-semibold">
-            Wallet Balance: {result ? result.walletBalance : 0} Ksh
-          </h2>
+          {result && result.message && user.walletBalance == undefined && (
+            <h2 className="text-xl font-semibold">
+              Wallet Balance: {result ? result.walletBalance : 0} Ksh
+            </h2>
+          )}
+          {user && user.walletBalance && (
+            <h2 className="text-xl font-semibold">
+              {" "}
+              Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
+            </h2>
+          )}
         </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
@@ -208,8 +298,10 @@ const UploadPage = () => {
           &copy; {new Date().getFullYear()} R and J Group. All rights reserved.
         </p>
       </footer>
-    </>
+    </div>
   );
 };
-
+function getSavedToken() {
+  return localStorage.getItem("auth_token");
+}
 export default UploadPage;

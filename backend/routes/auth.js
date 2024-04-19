@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ email: req.body.email }).select(
-    "password email isAdmin verified"
+    "password email isAdmin verified firstName referalCode"
   );
   if (!user) return res.status(400).send("Invalid email or password.");
 
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     //   user.verified
     // );
     resendEmail(user, res, token, user.referalCode);
-    res.status(400).send("Check your email for verification first...");
+    // res.status(400).send("Check your email for verification first...");
   }
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);

@@ -1,6 +1,6 @@
 {
   "jwtPrivateKey": "jwt_rnj_group_jwtPrivateKey",
-  "db": "rnj_db",
+  "db": "mongodb+srv://randjgroup:RandJ@cluster0.g0ostwe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
   "CLOUDINARY_NAME": "CLOUDINARY_NAME",
   "CLOUDINARY_API_KEY": "CLOUDINARY_API_KEY",
   "CLOUDINARY_API_SECRET": "CLOUDINARY_API_SECRET",

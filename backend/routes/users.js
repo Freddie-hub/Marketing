@@ -9,6 +9,7 @@ const { UserVerification } = require("../models/userVerification");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
+const axios = require("axios");
 const upload = multer({ dest: "uploads/" });
 const config = require("config");
 const nodemailer = require("nodemailer");
@@ -16,6 +17,7 @@ const { v4: uuidv4 } = require("uuid");
 const { emailMarkup } = require("../utility/email");
 const { sendEmail } = require("../utility/sendEmail");
 const { resendEmail } = require("../utility/resendEmail");
+const { token, stkPush } = require("../utility/mpesa");
 
 router.get("/verify/:userId/:uniqueString", async (req, res) => {
   const { userId, uniqueString } = req.params;
@@ -36,7 +38,7 @@ router.get("/verify/:userId/:uniqueString", async (req, res) => {
   const outcome = await bcrypt.compare(uniqueString, hashedString);
   if (!outcome) {
     res.send(
-      "<h3>Invalid Credentials due to an invalid link, <b>try logging in one more time in the app</b></h3>"
+      "<h3>Seems like this link already expired. <b>Please try logging in one more time and check in your email for the latest verification link</b></h3>"
     );
   }
 
@@ -69,6 +71,85 @@ router.get("/me", auth, async (req, res) => {
     return res.status(400).send("Invalid user ID.");
   const user = await User.findById(req.user._id).select("-password");
   res.send(user);
+});
+
+//depending on views passed in the req, calculate views * 0.1 and add to wallet balance
+router.put("/updateWallet", auth, async (req, res) => {
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).send("User not found.");
+  if (!req.body.category)
+    return res.status(404).send("Please select atlease one category.");
+
+  if (!user.IsEligibleToWork) {
+    // to let the ui know when to call the payment
+    // ideally you should do a pop up which after user taps okay
+    // we now cause the stk push , but ni front end inacall that
+    //so here we are just baring you from accessing the payment before commiting to work
+    return res
+      .status(404)
+      .send(
+        "You need to pay for subscription first. You will receive a pop up on your phone to pay for subscription. Once you pay, you will be able to start working."
+      );
+  }
+
+  const selectedCategory = req.body.category.toLowerCase();
+  let viewsValue = 0;
+  if (selectedCategory == "whatsapp") {
+    viewsValue = 0.5;
+  } else if (selectedCategory == "facebook") {
+    viewsValue = 0.35;
+  } else if (selectedCategory == "instagram" || selectedCategory == "twitter") {
+    viewsValue = 0.2;
+  } else if (selectedCategory == "tiktok") {
+    viewsValue = 0.1;
+  }
+
+  const views = req.body.views;
+  const walletBalance = (user.walletBalance + views * viewsValue).toFixed(2);
+  const updated = await User.findByIdAndUpdate(
+    userId,
+    {
+      walletBalance: walletBalance,
+    },
+    { new: true }
+  );
+  res.send(updated);
+});
+
+router.post("/stkPush", token, stkPush);
+
+router.post("/stk_callback", async (req, res, next) => {
+  console.log("------STK Called Back ------");
+  if (!req.body.Body.stkCallback?.CallbackMetadata) {
+    req.result = req.body.Body.stkCallback.ResultDesc;
+    console.log(
+      "No call back metadata ... ",
+      req.body.Body.stkCallback.ResultDesc
+    );
+    return;
+  }
+  const resultArray = req.body.Body.stkCallback?.CallbackMetadata?.Item;
+  const PhoneNumber = resultArray?.find(
+    (item) => item.Name === "PhoneNumber"
+  ).Value;
+  console.log("Phone ... ", PhoneNumber, "item array... ", resultArray);
+
+  // req.body.Body.stkCallback.CallbackMetadata.item
+
+  const gotUser = await User.find({ PhoneNumber: PhoneNumber });
+
+  const updatedUser = await Request.findOneAndUpdate(
+    { UserIdReference: gotUser._id },
+    {
+      $update: {
+        IsPaid: true,
+      },
+    },
+    { new: true }
+  );
+  console.log(updatedUser);
+  return updatedUser;
 });
 
 // Update user data
@@ -162,8 +243,12 @@ router.post("/", async (req, res) => {
 
   const token = user.generateAuthToken();
   if (token) {
-    resendEmail({ _id: result._id, email: result.email }, res, token, refCode);
-    // return res.status(201).send("Account created succesfully.");
+    resendEmail(
+      { _id: result._id, email: result.email, firstName: result.firstName },
+      res,
+      token,
+      refCode
+    );
   }
 
   if (!token) return res.status(201).send("Account created succesfully.");

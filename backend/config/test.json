@@ -1,4 +1,4 @@
 {
   "jwtPrivateKey": "1234",
-  "db": "mongodb://0.0.0.0/rnj_tests"
+  "db": "mongodb+srv://randjgroup:RandJ@cluster0.g0ostwe.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 }
