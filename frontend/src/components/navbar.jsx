@@ -13,6 +13,7 @@ export default function Navbar({ authToken, handleLogOut }) {
 
   const handleFetchUser = async () => {
     setLoading(true);
+    setUser(null);
     try {
       const response = await fetch(
         "https://rnrclone.onrender.com/api/users/me",
@@ -66,6 +67,7 @@ export default function Navbar({ authToken, handleLogOut }) {
         console.log("Stk successful!");
         const userData = await response.json();
         console.log("Stk successful!", userData);
+        handleFetchUser();
         setMpesaLoading(false);
       } else {
         console.log("Stk Flopped!");
@@ -114,21 +116,26 @@ export default function Navbar({ authToken, handleLogOut }) {
       } else {
         //make a button for activating account which opens a pop up
         return (
-          <Modal innerText="Activate Account">
-            <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
-              <button
-                onClick={() => {
-                  //make a fetch call to the backend to activate the account
-                  //if successful, show a success message
-                  //if not successful, show an error message
-                  handleTriggerStk();
-                }}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Initiate Mpesa Payment
-              </button>
-            </div>
-          </Modal>
+          <>
+            {loading && <AppLoader />}
+            {loading == false && (
+              <Modal innerText="Start working">
+                <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
+                  <button
+                    onClick={() => {
+                      //make a fetch call to the backend to activate the account
+                      //if successful, show a success message
+                      //if not successful, show an error message
+                      handleTriggerStk();
+                    }}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Initiate Mpesa Payment
+                  </button>
+                </div>
+              </Modal>
+            )}
+          </>
         );
       }
     } else {
