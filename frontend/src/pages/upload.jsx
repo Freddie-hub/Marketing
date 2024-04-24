@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import AppLoader from "../components/AppLoader";
+import { useNavigate } from "react-router-dom";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
@@ -12,6 +13,7 @@ const UploadPage = () => {
   const [screenshot, setScreenshot] = useState(null);
   const [error, setError] = useState("");
   const [user, setUser] = useState();
+  const navigate = useNavigate();
   const [authToken, setAuthToken] = useState();
 
   useEffect(() => {
@@ -219,6 +221,7 @@ const UploadPage = () => {
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
     // setAuthToken("");
+    navigate("/");
     window.location.reload();
   };
   let firstName;

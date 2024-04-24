@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./modal";
 import { CircleUserRound } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import AppLoader from "./AppLoader";
 
 export default function Navbar({ authToken, handleLogOut }) {
@@ -10,6 +11,7 @@ export default function Navbar({ authToken, handleLogOut }) {
   const [mpesaloading, setMpesaLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState();
+  const navigate = useNavigate();
 
   const handleFetchUser = async () => {
     setLoading(true);
