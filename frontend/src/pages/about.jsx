@@ -1,93 +1,72 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Navbar from "../components/navbar";
+import aboutImage from "../assets/images/about-banner.jpg";
 
 const AboutSection = () => {
   const [authToken, setAuthToken] = useState("");
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
-    // setAuthToken("");
     window.location.reload();
   };
+
   useEffect(() => {
-    // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) setAuthToken(authenticatedToken);
   }, []);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, rotateY: -180 }}
+      animate={{ opacity: 1, rotateY: 0 }}
+      exit={{ opacity: 0, rotateY: 180 }}
+      transition={{duration: 2}}
+      className="min-h-screen bg-gradient-to-r from-purple-200 to-blue-200 overflow-hidden"
+    >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
-      <section className="section about" id="about" aria-label="about">
-        <div className="container">
-          <div
-            className="about-banner img-holder"
-            style={{ "--width": 720, "--height": 960 }}
-          >
-            <img
-              src="./assets/images/about-banner.jpg"
-              width="720"
-              height="960"
-              loading="lazy"
-              alt="about banner"
-              className="img-cover"
-            />
-            <button className="play-btn" aria-label="Play video">
-              <ion-icon name="play" aria-hidden="true"></ion-icon>
-            </button>
+      <section className="flex flex-wrap items-center justify-center p-8">
+        <div className="w-full lg:w-1/2">
+          <div className="lg:mx-8 mb-8 lg:mb-0">
+            <div className="relative">
+              <img src={aboutImage} alt="About Banner" className="rounded-lg" />
+              {/* <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4">
+              </button> */}
+            </div>
           </div>
-
-          <div className="about-content">
-            <h2 className="h2 section-title">About Us</h2>
-
-            <p className="section-text">
-              Lorem ipsum dolor sit amet, con se ctetur adipiscing elit. In
-              sagittis eg esta ante, sed viverra nunc tinci dunt nec elei fend
-              et tiram.
+        </div>
+        <div className="w-full lg:w-1/2">
+          <div className="lg:mx-8">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              About Us
+            </h2>
+            <p className="text-lg text-gray-700 mb-6">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
+              sagittis egestas ante, sed viverra nunc tincidunt nec.
             </p>
-
-            <h3 className="h3">Who We Are</h3>
-
-            <p className="section-text">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Who We Are</h3>
+            <p className="text-lg text-gray-700 mb-6">
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
               quae ab illo inventore veritatis et quasi architecto beatae vitae
               dicta sunt explicabo.
             </p>
-
-            <h3 className="h3">Our Success</h3>
-
-            <ul className="about-list">
-              <li className="about-item">
-                <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
-
-                <p className="section-text">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry.
-                </p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Success</h3>
+            <ul className="list-disc ml-6">
+              <li className="text-lg text-gray-700 mb-2">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry.
               </li>
-
-              <li className="about-item">
-                <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
-
-                <p className="section-text">
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                </p>
+              <li className="text-lg text-gray-700 mb-2">
+                It is a long established fact that a reader will be distracted by
+                the readable content of a page when looking at its layout.
               </li>
-
-              <li className="about-item">
-                <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
-
-                <p className="section-text">
-                  Contrary to popular belief, Lorem Ipsum is not simply random
-                  text. It has roots in a piece of classical Latin literature.
-                </p>
+              <li className="text-lg text-gray-700 mb-2">
+                Contrary to popular belief, Lorem Ipsum is not simply random text.
+                It has roots in a piece of classical Latin literature.
               </li>
             </ul>
-
-            <h3 className="h3">Our Mission</h3>
-
-            <p className="section-text">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Mission</h3>
+            <p className="text-lg text-gray-700 mb-6">
               At vero eos et accusamus et iusto odio dignissimos ducimus qui
               blanditiis praesentium voluptatum deleniti atque corrupti quos
               dolores et quas molestias excepturi sint occaecati cupiditate non
@@ -96,7 +75,14 @@ const AboutSection = () => {
           </div>
         </div>
       </section>
-    </div>
+
+      <footer className="bg-gray-800 text-white text-center py-4">
+        <p>
+          &copy; {new Date().getFullYear()} R and J Group. All rights
+          reserved.
+        </p>
+      </footer>
+    </motion.div>
   );
 };
 
