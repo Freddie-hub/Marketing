@@ -114,7 +114,7 @@ export default function Navbar({ authToken, handleLogOut }) {
       } else {
         //make a button for activating account which opens a pop up
         return (
-          <Modal innerText="Activate Account">
+          <Modal innerText="Start Working">
             <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
               <button
                 onClick={() => {
