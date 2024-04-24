@@ -220,9 +220,11 @@ const UploadPage = () => {
     window.location.reload();
   };
   let firstName;
+  let userdetails;
   if (user) {
     // console.log("daab....", user);
     firstName = user.firstName;
+    userdetails = user.toString();
   }
 
   return (
@@ -244,6 +246,11 @@ const UploadPage = () => {
       )}
       <p className="hero-subtitle text-xl text-gray-600 mb-4">
         {firstName ? `Welcome, ${firstName}` : "Rosemary and Jared Group"}
+      </p>
+      <p className="hero-subtitle text-xl text-gray-600 mb-4">
+        {userdetails
+          ? `userdetails to available, ${userdetails}`
+          : "Marketing on whole new level!"}
       </p>
       <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md z-1">
         <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
