@@ -43,7 +43,9 @@ function ContactSection() {
             aria-label="contact"
           >
             <div className="container mx-auto px-4 py-4">
-              <h2 className="text-center text-4xl font-bold text-gray-800 mb-4">Connect With Us</h2>
+              <h2 className="text-center text-4xl font-bold text-gray-800 mb-4">
+                Connect With Us
+              </h2>
 
               <form
                 className="max-w-lg mx-auto bg-white p-8 mt-4 rounded-lg shadow-lg"
@@ -108,7 +110,11 @@ function ContactSection() {
               <div className="flex justify-center mt-8">
                 <div className="mr-6">
                   <a href="https://whatsapp.com/channel/0029VaMIf1eFSAt7jSslp70w">
-                    <img src={whatsappIcon} alt="WhatsApp" className="w-12 h-12" />
+                    <img
+                      src={whatsappIcon}
+                      alt="WhatsApp"
+                      className="w-12 h-12"
+                    />
                   </a>
                   <a
                     href="https://whatsapp.com/channel/0029VaMIf1eFSAt7jSslp70w"
@@ -119,7 +125,11 @@ function ContactSection() {
                 </div>
                 <div>
                   <a href="https://www.facebook.com/share/p/JV1nr57Ns7PchsAV/?mibextid=oFDknk">
-                    <img src={facebookIcon} alt="Facebook" className="w-12 h-12" />
+                    <img
+                      src={facebookIcon}
+                      alt="Facebook"
+                      className="w-12 h-12"
+                    />
                   </a>
                   <a
                     href="https://www.facebook.com/share/p/JV1nr57Ns7PchsAV/?mibextid=oFDknk"
@@ -133,7 +143,8 @@ function ContactSection() {
           </section>
           <footer className="bg-gray-800 text-white text-center py-4">
             <p>
-              &copy; {new Date().getFullYear()} R and J Group. All rights reserved.
+              &copy; {new Date().getFullYear()} R and J Group. All rights
+              reserved.
             </p>
           </footer>
         </motion.div>

@@ -20,6 +20,8 @@ const UploadPage = () => {
     if (authenticatedToken) {
       setAuthToken(authenticatedToken);
       handleFetchUser();
+    } else {
+      setAuthToken("");
     }
   }, []);
   const formatPhoneNumber = (phoneNumber) => {
@@ -124,6 +126,36 @@ const UploadPage = () => {
     setScreenshot(file);
   };
 
+  const handleAlertOwnerToPayWorker = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/requestPayment",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": localStorage.getItem("auth_token"),
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        alert("Operation successful!");
+        setLoading(false);
+      } else {
+        const data = await response.text();
+        alert(data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert(
+        "Oops! An error occurred while saving views data: " + error.message
+      );
+      setLoading(false);
+    }
+  };
+
   const handleUpload = async () => {
     setLoading(true);
     if (!category || views === "") {
@@ -160,6 +192,7 @@ const UploadPage = () => {
         setCategory("");
         setViews("");
         setScreenshot(null);
+        handleAlertOwnerToPayWorker();
         setLoading(false);
       } else {
         const data = await response.text();
