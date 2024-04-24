@@ -118,8 +118,10 @@ export default function Navbar({ authToken, handleLogOut }) {
       } else {
         //make a button for activating account which opens a pop up
         return (
-          <Modal innerText="Activate Account">
+          <Modal innerText="Activate Account" className="right-4">
             <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
+              <p>Enter Referral Code below. If you were not referred leave it blank </p>
+            < input placeholder="Referral Code" className="mt-4 mb-4 p-2 mr-3 rounded" />
               <button
                 onClick={() => {
                   //make a fetch call to the backend to activate the account
@@ -129,6 +131,7 @@ export default function Navbar({ authToken, handleLogOut }) {
                 }}
                 className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               >
+                
                 Initiate Mpesa Payment
               </button>
             </div>
