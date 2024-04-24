@@ -186,9 +186,11 @@ const UploadPage = () => {
       );
       if (response.ok) {
         const data = await response.json();
+        // const data = await response;
         setResult(data);
         // Clear inputs
-        alert("Operation successful!");
+        console.log("Data: ", data);
+        alert(`Operation successful! ${data}`);
         setCategory("");
         setViews("");
         setScreenshot(null);

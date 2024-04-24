@@ -13,6 +13,7 @@ export default function Navbar({ authToken, handleLogOut }) {
 
   const handleFetchUser = async () => {
     setLoading(true);
+    setUser(null);
     try {
       const response = await fetch(
         "https://rnrclone.onrender.com/api/users/me",
@@ -66,6 +67,7 @@ export default function Navbar({ authToken, handleLogOut }) {
         console.log("Stk successful!");
         const userData = await response.json();
         console.log("Stk successful!", userData);
+        handleFetchUser();
         setMpesaLoading(false);
       } else {
         console.log("Stk Flopped!");
