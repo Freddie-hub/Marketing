@@ -186,6 +186,11 @@ const UploadPage = () => {
     // setAuthToken("");
     window.location.reload();
   };
+  let firstName;
+  if (user) {
+    // console.log("daab....", user);
+    firstName = user.firstName;
+  }
 
   return (
     <div className="relative">
@@ -205,9 +210,7 @@ const UploadPage = () => {
         </div>
       )}
       <p className="hero-subtitle text-xl text-gray-600 mb-4">
-        {user.firstName
-          ? `Welcome, ${user.firstName}`
-          : "Rosemary and Jared Group"}
+        {firstName ? `Welcome, ${firstName}` : "Rosemary and Jared Group"}
       </p>
       <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md z-1">
         <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
