@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { IonIcon } from "@ionic/react";
+import { motion } from "framer-motion";
+import { Lightbulb, BotMessageSquare, MonitorDot, Megaphone, MailPlus, BadgeDollarSign } from "lucide-react";
 import Navbar from "../components/navbar";
-import { Lightbulb } from "lucide-react";
 
 function Service() {
   const [authToken, setAuthToken] = useState("");
+
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
-    // setAuthToken("");
     window.location.reload();
   };
+
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
@@ -17,7 +18,13 @@ function Service() {
   }, []);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, rotateY: -180 }}
+      animate={{ opacity: 1, rotateY: 0 }}
+      exit={{ opacity: 0, rotateY: 180 }}
+      transition={{ duration: 1 }}
+      className="min-h-screen bg-gradient-to-r from-purple-200 to-blue-200 overflow-hidden"
+    >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       <section
         className="section service"
@@ -39,11 +46,10 @@ function Service() {
             <li className="bg-gray-200 bg-opacity-50">
               <div className="service-card p-20 md:p-15 border border-platinum rounded-lg text-center shadow transition duration-300 service-card group hover:-translate-y-3 focus-within:-translate-y-3">
                 <div
-                  className="card-icon text-white text-25 max-w-max mx-auto p-18 rounded-full"
+                  className="card-icon p-3 text-white text-25 max-w-max mx-auto p-18 rounded-full"
                   style={{ backgroundColor: "#13c4a1" }}
                 >
-                  <IonIcon name="chatbox"></IonIcon>{" "}
-                  {/* Use IonIcon component to render the icon */}
+                  <BotMessageSquare size={50}/>
                 </div>
                 <h3 className="h3">
                   <a href="#" className="card-title card-title my-20 mx-8">
@@ -62,10 +68,10 @@ function Service() {
             <li className="bg-gray-200 bg-opacity-50">
               <div className="service-card bg-white p-20 md:p-15 border border-platinum rounded-lg text-center shadow transition duration-300 service-card group hover:-translate-y-3 focus-within:-translate-y-3">
                 <div
-                  className="card-icon text-white text-25 max-w-max mx-auto p-18 rounded-full"
+                  className="card-icon p-3 text-white text-25 max-w-max mx-auto p-18 rounded-full"
                   style={{ backgroundColor: "#6610f2" }}
                 >
-                  <IonIcon name="desktop"></IonIcon>
+                  <MonitorDot size={50}/>
                 </div>
                 <h3 className="h3">
                   <a href="#" className="card-title card-title my-20 mx-8">
@@ -106,10 +112,10 @@ function Service() {
             <li className="bg-gray-200 bg-opacity-50">
               <div className="service-card bg-white p-20 md:p-15 border border-platinum rounded-lg text-center shadow transition duration-300 service-card group hover:-translate-y-3 focus-within:-translate-y-3">
                 <div
-                  className="card-icon text-white text-25 max-w-max mx-auto p-18 rounded-full"
+                  className="card-icon p-3 text-white text-25 max-w-max mx-auto p-18 rounded-full"
                   style={{ backgroundColor: "#fc3549" }}
                 >
-                  <IonIcon name="phone-portrait"></IonIcon>
+                  <Megaphone size={50}/>
                 </div>
                 <h3 className="h3">
                   <a href="#" className="card-title card-title my-20 mx-8">
@@ -128,10 +134,10 @@ function Service() {
             <li className="bg-gray-200 bg-opacity-50">
               <div className="service-card bg-white p-20 md:p-15 border border-platinum rounded-lg text-center shadow transition duration-300 service-card group hover:-translate-y-3 focus-within:-translate-y-3">
                 <div
-                  className="card-icon text-white text-25 max-w-max mx-auto p-18 rounded-full"
+                  className="card-icon p-3 text-white text-25 max-w-max mx-auto p-18 rounded-full"
                   style={{ backgroundColor: "#00d280" }}
                 >
-                  <IonIcon name="archive"></IonIcon>
+                  <MailPlus size={50}/>
                 </div>
                 <h3 className="h3">
                   <a href="#" className="card-title card-title my-20 mx-8">
@@ -150,10 +156,10 @@ function Service() {
             <li className="bg-gray-200 bg-opacity-50">
               <div className="service-card bg-white p-20 md:p-15 border border-platinum rounded-lg text-center shadow transition duration-300 service-card group hover:-translate-y-3 focus-within:-translate-y-3">
                 <div
-                  className="card-icon text-white text-25 max-w-max mx-auto p-18 rounded-full"
+                  className="card-icon p-3 text-white text-25 max-w-max mx-auto p-18 rounded-full"
                   style={{ backgroundColor: "#ff612f" }}
                 >
-                  <IonIcon name="build"></IonIcon>
+                  <BadgeDollarSign size={50}/>
                 </div>
                 <h3 className="h3">
                   <a href="#" className="card-title card-title my-20 mx-8">
@@ -167,6 +173,7 @@ function Service() {
                 </p>
               </div>
             </li>
+            {/* Add other service cards similarly */}
           </ul>
         </div>
       </section>
@@ -175,7 +182,7 @@ function Service() {
           &copy; {new Date().getFullYear()} R and J Group. All rights reserved.
         </p>
       </footer>
-    </div>
+    </motion.div>
   );
 }
 
