@@ -112,13 +112,13 @@ export default function Navbar({ authToken, handleLogOut }) {
             href="/upload"
             className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
           >
-            Start Working
+            Go To Working Page
           </a>
         );
       } else {
         //make a button for activating account which opens a pop up
         return (
-          <Modal innerText="Start Working">
+          <Modal innerText="Activate Account">
             <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
               <button
                 onClick={() => {
