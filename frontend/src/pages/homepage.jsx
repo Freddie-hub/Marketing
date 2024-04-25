@@ -18,6 +18,7 @@ const HomePage = () => {
   useEffect(() => {
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) setAuthToken(authenticatedToken);
+    if (!authenticatedToken) navigate("/login");
     setShowContent(true);
     // if (authenticatedToken) handleFetchUser();
   }, []);
@@ -33,10 +34,7 @@ const HomePage = () => {
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       <AnimatePresence>
         {showContent && (
-          <motion.div
-            key="container"
-            className="container mx-auto px-4 py-8"
-          >
+          <motion.div key="container" className="container mx-auto px-4 py-8">
             <section className="section hero">
               <div className="flex justify-center items-center my-8">
                 <div className="hero-content mr-8 ml-4">
@@ -49,9 +47,9 @@ const HomePage = () => {
                     The power of Personalized Marketing
                   </h1>
                   <p className="hero-text text-lg text-gray-800 mb-8">
-                    Established in 2017 in the heart of California, USA, we
-                    have been on a mission to redefine the way businesses
-                    connect with their audiences globally.
+                    Established in 2017 in the heart of California, USA, we have
+                    been on a mission to redefine the way businesses connect
+                    with their audiences globally.
                   </p>
                   {/* <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
                     Start Working
@@ -74,8 +72,7 @@ const HomePage = () => {
       </AnimatePresence>
       <footer className="bg-gray-800 text-white text-center py-4 absolute bottom-0 w-full">
         <p>
-          &copy; {new Date().getFullYear()} R and J Group. All rights
-          reserved.
+          &copy; {new Date().getFullYear()} R and J Group. All rights reserved.
         </p>
       </footer>
     </motion.div>

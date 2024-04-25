@@ -39,6 +39,37 @@ const UploadPage = () => {
 
     return formattedNumber;
   };
+  //call server to do handleRequestPayment
+  const handleRequestPayment = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/requestPayment",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const resp = await response.text();
+        console.log(resp);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error occurred:", data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error occurred: " + error.message);
+      console.error("Error occurred:", error.message);
+      setLoading(false);
+    }
+  };
 
   const handleTriggerStk = async () => {
     setMpesaLoading(true);
@@ -164,23 +195,25 @@ const UploadPage = () => {
 
   const handleUpload = async () => {
     setLoading(true);
-    
+
     // Check if the user has already uploaded an image for the selected category today
     const today = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-    const lastUploadTimestamp = localStorage.getItem(`${category}_upload_timestamp`);
-    
+    const lastUploadTimestamp = localStorage.getItem(
+      `${category}_upload_timestamp`
+    );
+
     if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
       setError(`You have already uploaded an image for ${category} today.`);
       setLoading(false);
       return;
     }
-    
+
     if (!category || views === "") {
       setError("Please select category and enter valid views.");
       setLoading(false);
       return;
     }
-    
+
     setError("");
 
     // Multiply views by 2.5Ksh
@@ -206,10 +239,13 @@ const UploadPage = () => {
         const data = await response.json();
         // const data = await response;
         setResult(data);
-        
+
         // Store the timestamp of the current upload
-        localStorage.setItem(`${category}_upload_timestamp`, new Date().toISOString());
-        
+        localStorage.setItem(
+          `${category}_upload_timestamp`,
+          new Date().toISOString()
+        );
+
         // Clear inputs
         console.log("Data: ", data);
         alert(`Operation successful! ${data}`);
@@ -246,7 +282,14 @@ const UploadPage = () => {
   };
 
   return (
-    <div style={{ backgroundImage: `url(${moneyImage})`, backgroundSize: 'cover', minHeight: '100vh', backgroundPosition: 'center' }}>
+    <div
+      style={{
+        backgroundImage: `url(${moneyImage})`,
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        backgroundPosition: "center",
+      }}
+    >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
@@ -263,20 +306,28 @@ const UploadPage = () => {
         </div>
       )}
       <div className="flex justify-between">
-        <div  className="text-white m-4">
+        <div className="text-white m-4">
           {user ? (
             <p>Welcome, {user.firstName}</p>
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-            <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
-          <p class="left-0">Referral Earnings</p>
+          <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
+            <p class="left-0">
+              Referral Earnings{": Kes "}
+              {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
+            </p>
 
-          <div class="">
-            <p>Earnings: <span class="earnings-balance">[Your balance in Ksh]</span></p>
+            <div class="">
+              <p>
+                Earnings:{" "}
+                <span class="earnings-balance">
+                  {": Kes "}
+                  {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-
         </div>
         <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
           <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
@@ -363,7 +414,12 @@ const UploadPage = () => {
           </div>
         </div>
         <div>
-          <p className="right-0">Withdraw</p>
+          <p
+            className="right-0 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => handleRequestPayment()}
+          >
+            Withdraw
+          </p>
         </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">

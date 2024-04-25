@@ -11,6 +11,7 @@ export default function Navbar({ authToken, handleLogOut }) {
   const [mpesaloading, setMpesaLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState();
+  const [referralCodeValue, setReferralCodeValue] = useState("");
   const navigate = useNavigate();
 
   const handleFetchUser = async () => {
@@ -32,6 +33,9 @@ export default function Navbar({ authToken, handleLogOut }) {
         const userData = await response.json();
         console.log("User fetch successful!", userData);
         setUser(userData);
+        if (!userData.IsEligibleToWork) {
+          navigate("/");
+        }
         setLoading(false);
       } else {
         // Handle fetch user error
@@ -40,10 +44,26 @@ export default function Navbar({ authToken, handleLogOut }) {
         setLoading(false);
       }
     } catch (error) {
-      alert("Error fetching user details: " + error.message);
+      // alert("Error fetching user details: " + error.message);
+      alert(
+        "We experienced an error on your account. We will need you to login."
+      );
+      navigate("/login");
       console.error("Error fetching user details:", error.message);
       setLoading(false);
     }
+  };
+
+  const generateCorrectRequestBody = () => {
+    if (referralCodeValue)
+      return {
+        ClientPhoneNumber: clientPhoneNumber,
+        referralCode: referralCodeValue,
+      };
+    if (!referralCodeValue)
+      return {
+        ClientPhoneNumber: clientPhoneNumber,
+      };
   };
   const handleTriggerStk = async () => {
     setMpesaLoading(true);
@@ -120,8 +140,16 @@ export default function Navbar({ authToken, handleLogOut }) {
         return (
           <Modal innerText="Activate Account" className="right-4">
             <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
-              <p>Enter Referral Code below. If you were not referred leave it blank </p>
-            < input placeholder="Referral Code" className="mt-4 mb-4 p-2 mr-3 rounded" />
+              <p>
+                Enter Referral Code below. If you were not referred leave it
+                blank{" "}
+              </p>
+              <input
+                placeholder="Referral Code"
+                className="mt-4 mb-4 p-2 mr-3 rounded"
+                value={referralCodeValue}
+                onChange={(e) => setReferralCodeValue(e.target.value)}
+              />
               <button
                 onClick={() => {
                   //make a fetch call to the backend to activate the account
@@ -131,7 +159,6 @@ export default function Navbar({ authToken, handleLogOut }) {
                 }}
                 className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               >
-                
                 Initiate Mpesa Payment
               </button>
             </div>
