@@ -156,8 +156,8 @@ const SignUp = ({ toggleForms }) => {
           </div>
           <div>
             <input
-              type="tel"
-              placeholder="Phone Number"
+              type="number"
+              placeholder="Safaricom Phone Number"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value.toString())}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"

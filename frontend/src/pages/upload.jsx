@@ -3,8 +3,6 @@ import Navbar from "../components/navbar";
 import AppLoader from "../components/AppLoader";
 import { useNavigate } from "react-router-dom";
 import moneyImage from "../assets/images/money.jpeg";
-import moneyImage1 from "../assets/images/money1.jpg";
-import moneyImage2 from "../assets/images/money2.jpg";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
@@ -18,7 +16,9 @@ const UploadPage = () => {
   const [user, setUser] = useState();
   const navigate = useNavigate();
   const [authToken, setAuthToken] = useState();
-
+  const [withdrawalType, setWithdrawalType] = useState("monthly");
+  const [withdrawalAmount, setWithdrawalAmount] = useState("");
+  
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
@@ -30,14 +30,36 @@ const UploadPage = () => {
     }
   }, []);
 
-  const formatPhoneNumber = (phoneNumber) => {
-    // Remove the initial zero if present
-    const trimmedNumber = phoneNumber.replace(/^0/, "");
+  const handleFetchUser = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/me",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+        }
+      );
 
-    // Append '254' at the start
-    const formattedNumber = "254" + trimmedNumber;
-
-    return formattedNumber;
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("User fetch successful!", userData);
+        setUser(userData);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error fetching user:", data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error fetching user details: " + error.message);
+      console.error("Error fetching user details:", error.message);
+      setLoading(false);
+    }
   };
 
   const handleTriggerStk = async () => {
@@ -84,36 +106,14 @@ const UploadPage = () => {
     }
   };
 
-  const handleFetchUser = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/me",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-        }
-      );
+  const formatPhoneNumber = (phoneNumber) => {
+    const trimmedNumber = phoneNumber.replace(/^0/, "");
+    const formattedNumber = "254" + trimmedNumber;
+    return formattedNumber;
+  };
 
-      if (response.ok) {
-        const userData = await response.json();
-        console.log("User fetch successful!", userData);
-        setUser(userData);
-        setLoading(false);
-      } else {
-        // Handle fetch user error
-        const data = await response.text();
-        console.error("Error fetching user:", data);
-        setLoading(false);
-      }
-    } catch (error) {
-      alert("Error fetching user details: " + error.message);
-      console.error("Error fetching user details:", error.message);
-      setLoading(false);
-    }
+  const getSavedToken = () => {
+    return localStorage.getItem("auth_token");
   };
 
   const handleCategoryChange = (e) => {
@@ -165,8 +165,7 @@ const UploadPage = () => {
   const handleUpload = async () => {
     setLoading(true);
     
-    // Check if the user has already uploaded an image for the selected category today
-    const today = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+    const today = new Date().toISOString().slice(0, 10);
     const lastUploadTimestamp = localStorage.getItem(`${category}_upload_timestamp`);
     
     if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
@@ -183,12 +182,9 @@ const UploadPage = () => {
     
     setError("");
 
-    // Multiply views by 2.5Ksh
     const earnings = parseFloat(views) * 2.5;
-    // Update balance
     setBalance(balance + earnings);
 
-    //make API call to upload
     try {
       console.log("Uploading...", category, " Views: ", views);
       const response = await fetch(
@@ -204,13 +200,10 @@ const UploadPage = () => {
       );
       if (response.ok) {
         const data = await response.json();
-        // const data = await response;
         setResult(data);
         
-        // Store the timestamp of the current upload
         localStorage.setItem(`${category}_upload_timestamp`, new Date().toISOString());
         
-        // Clear inputs
         console.log("Data: ", data);
         alert(`Operation successful! ${data}`);
         setCategory("");
@@ -239,6 +232,36 @@ const UploadPage = () => {
     }
   };
 
+
+  const handleWithdrawalTypeChange = (e) => {
+    setWithdrawalType(e.target.value);
+  };
+
+  const handleWithdrawalAmountChange = (e) => {
+    const value = e.target.value;
+    if (value >= 0) {
+      setWithdrawalAmount(value);
+    }
+  };
+
+  const handleWithdrawalSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      if (withdrawalType === "monthly") {
+        alert("Payments will be disbursed after every 30 days.");
+        setLoading(false);
+      } else if (withdrawalType === "referral") {
+        // Make API call with withdrawalAmount
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("An error occurred while processing withdrawal: " + error.message);
+      setLoading(false);
+    }
+  };
+
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
     navigate("/");
@@ -263,20 +286,18 @@ const UploadPage = () => {
         </div>
       )}
       <div className="flex justify-between">
-        <div  className="text-white m-4">
+        <div className="text-white m-4">
           {user ? (
             <p>Welcome, {user.firstName}</p>
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-            <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
-          <p class="left-0">Referral Earnings</p>
-
-          <div class="">
-            <p>Earnings: <span class="earnings-balance">[Your balance in Ksh]</span></p>
+          <div class="text-orange mt-10 referral-wallet border-2 border-red-400 border-solid rounded">
+            <p class="left-0">Referral Earnings</p>
+            <div class="">
+              <p>Earnings: <span class="earnings-balance">Ksh 0</span></p>
+            </div>
           </div>
-        </div>
-
         </div>
         <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
           <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
@@ -345,7 +366,6 @@ const UploadPage = () => {
             }}
           >
             {loading ? "Loading...  " : "Upload"}
-
             {loading && <AppLoader />}
           </button>
           <div className="mt-6">
@@ -362,9 +382,31 @@ const UploadPage = () => {
             )}
           </div>
         </div>
-        <div>
-          <p className="right-0">Withdraw</p>
-        </div>
+        <div className="mt-6 mr-10 bg-slate-50 p-6 rounded">
+            <h2 className="text-xl font-semibold">Withdrawal</h2>
+            <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
+              <div className="mb-4">
+                <label htmlFor="withdrawalType" className="block text-gray-700 font-semibold mb-2">Withdrawal Type:</label>
+                <select id="withdrawalType" value={withdrawalType} onChange={handleWithdrawalTypeChange} className="w-full p-2 border rounded">
+                  <option value="referral">Referral Earnings</option>
+                  <option value="monthly">Monthly Earnings</option>
+                </select>
+              </div>
+              {withdrawalType === "referral" && (
+                <div className="mb-4">
+                  <label htmlFor="withdrawalAmount" className="block text-gray-700 font-semibold mb-2">Enter Amount:</label>
+                  <input type="number" id="withdrawalAmount" value={withdrawalAmount} onChange={handleWithdrawalAmountChange} className="w-full p-2 border rounded" />
+                </div>
+              )}
+              <button
+                type="submit"
+                className={loading ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600" : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"}
+                style={{ pointerEvents: loading ? "none" : "auto" }}
+              >
+                {loading ? "Processing..." : "Submit"}
+              </button>
+            </form>
+          </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>
@@ -374,9 +416,5 @@ const UploadPage = () => {
     </div>
   );
 };
-
-function getSavedToken() {
-  return localStorage.getItem("auth_token");
-}
 
 export default UploadPage;
