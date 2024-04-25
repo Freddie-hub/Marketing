@@ -38,33 +38,34 @@ const ProjectsPage = () => {
           <p className="section-text"></p>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-7 ml-4 mr-4 mb-20">
             {/* Project 1 */}
-            <li>
-              <div className="project-card relative rounded-lg overflow-hidden">
-                <figure className="card-banner img-holder relative">
-                  <img
-                    src={project1Image}
-                    loading="lazy"
-                    alt="Designing a better cinema experience"
-                    className="object-cover w-full h-full"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
-                    <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
-                      </p>
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 mb-3">
-                      <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
-                        </a>
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="image-overlay absolute inset-0 bg-blue opacity-50"></div>
-                </figure>
-              </div>
-            </li>
+            <li className="h-200">
+  <div className="project-card relative rounded-lg overflow-hidden">
+    <figure className="card-banner img-holder relative">
+      <img
+        src={project1Image}
+        loading="lazy"
+        alt="Designing a better cinema experience"
+        className="object-cover w-full h-full"
+      />
+      <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
+        <div className="absolute top-10 left-0 right-0 mt-3">
+          <p className="text-lavender-gray text-gold font-bold text-2xl leading-tight">
+            Personalized E-commerce Campaigns
+          </p>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 mb-3">
+          <h3 className="text-blue">
+            <a href="#" className="text-gold font-bold text-2xl">
+            Customized promotions for online shoppers, ensuring tailored offers based on preferences and purchase history for enhanced conversion and satisfaction.
+            </a>
+          </h3>
+        </div>
+      </div>
+      <div className="image-overlay absolute inset-0 bg-blue opacity-50"></div>
+    </figure>
+  </div>
+</li>
+
 
             {/* Project 2 */}
             <li>
@@ -78,14 +79,14 @@ const ProjectsPage = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
                     <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
+                      <p className="text-lavender-gray text-gold font-bold text-2xl leading-tight">
+                      Global Brand Expansion
                       </p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-3">
                       <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
+                        <a href="#" className="text-gold font-bold text-2xl">
+                        Market analysis and localization strategies for seamless international entry, driving sustained growth and recognition across diverse markets.
                         </a>
                       </h3>
                     </div>
@@ -107,14 +108,14 @@ const ProjectsPage = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
                     <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
+                      <p className="text-lavender-gray text-gold font-bold text-2xl leading-tight">
+                      AI-driven Customer Segmentation
                       </p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-3">
                       <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
+                        <a href="#" className="text-gold font-bold text-2xl">
+                        Advanced algorithms for precise customer demographics, enabling hyper-targeted strategies to maximize engagement, conversion, and loyalty.
                         </a>
                       </h3>
                     </div>
@@ -136,14 +137,14 @@ const ProjectsPage = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
                     <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
+                      <p className="text-lavender-gray text-blue font-bold text-2xl leading-tight">
+                      Search Engine Optimization (SEO)
                       </p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-3">
                       <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
+                        <a href="#" className="text-gold font-bold text-2xl">
+                        Elevating online visibility through strategic keyword optimization, content enhancement, and technical improvements, driving organic traffic and boosting website rankings effectively.
                         </a>
                       </h3>
                     </div>
@@ -165,14 +166,14 @@ const ProjectsPage = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
                     <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
+                      <p className="text-lavender-gray text-blue font-bold text-2xl leading-tight">
+                      Pay-Per-Click Advertising (PPC)
                       </p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-3">
                       <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
+                        <a href="#" className="text-gold font-bold text-2xl">
+                        Implementing targeted ad campaigns to maximize ROI, leveraging precise audience targeting, compelling ad copy, and strategic bidding strategies for optimal results and conversion rates.
                         </a>
                       </h3>
                     </div>
@@ -194,14 +195,14 @@ const ProjectsPage = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-between items-center text-center z-10">
                     <div className="absolute top-10 left-0 right-0 mt-3">
-                      <p className="text-lavender-gray text-base leading-tight">
-                        SEO Optimization
+                      <p className="text-lavender-gray text-gold font-bold text-2xl leading-tight">
+                      Email Marketing Automation
                       </p>
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 mb-3">
                       <h3 className="text-blue">
-                        <a href="#" className="text-blue">
-                          Designing a better cinema experience
+                        <a href="#" className="text-gold font-bold text-2xl">
+                        Deploying automated email campaigns for personalized customer interactions, nurturing leads, and driving conversions through tailored content delivery and strategic engagement workflows.
                         </a>
                       </h3>
                     </div>

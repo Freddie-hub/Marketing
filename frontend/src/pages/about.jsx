@@ -40,37 +40,26 @@ const AboutSection = () => {
               About Us
             </h2>
             <p className="text-lg text-gray-700 mb-6">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-              sagittis egestas ante, sed viverra nunc tincidunt nec.
-            </p>
+            Rosemary and Jared Group, founded in 2017, pioneers personalized marketing, forging deep connections between brands and consumers through innovation and strategic excellence.            </p>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Who We Are</h3>
             <p className="text-lg text-gray-700 mb-6">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo.
+            Rosemary and Jared Group, established in 2017, is a trailblazing force in personalized marketing, dedicated to reshaping brand-consumer relationships through innovation and strategic prowess.
             </p>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Success</h3>
             <ul className="list-disc ml-6">
               <li className="text-lg text-gray-700 mb-2">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry.
+              Innovative Approach: Pioneering personalized marketing strategies that resonate deeply with audiences, driving engagement and loyalty.
               </li>
               <li className="text-lg text-gray-700 mb-2">
-                It is a long established fact that a reader will be distracted by
-                the readable content of a page when looking at its layout.
+              Client-Centric Philosophy: Prioritizing client success through transparent communication, collaboration, and tailored solutions.
               </li>
               <li className="text-lg text-gray-700 mb-2">
-                Contrary to popular belief, Lorem Ipsum is not simply random text.
-                It has roots in a piece of classical Latin literature.
+              Delivering measurable outcomes across diverse industries, from startups to established enterprises, through our personalized marketing expertise.
               </li>
             </ul>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Our Mission</h3>
             <p className="text-lg text-gray-700 mb-6">
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui
-              blanditiis praesentium voluptatum deleniti atque corrupti quos
-              dolores et quas molestias excepturi sint occaecati cupiditate non
-              provident, similique sunt in.
+            Pioneering personalized marketing, we strive to redefine brand-consumer connections through innovative strategies and authentic experiences that drive engagement and loyalty.
             </p>
           </div>
         </div>
