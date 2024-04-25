@@ -53,9 +53,9 @@ const HomePage = () => {
                     have been on a mission to redefine the way businesses
                     connect with their audiences globally.
                   </p>
-                  <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+                  {/* <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
                     Start Working
-                  </button>
+                  </button> */}
                   {/* You can add a button here if needed */}
                 </div>
                 <figure className="hero-banner">

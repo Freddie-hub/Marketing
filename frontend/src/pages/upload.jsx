@@ -3,6 +3,8 @@ import Navbar from "../components/navbar";
 import AppLoader from "../components/AppLoader";
 import { useNavigate } from "react-router-dom";
 import moneyImage from "../assets/images/money.jpeg";
+import moneyImage1 from "../assets/images/money1.jpg";
+import moneyImage2 from "../assets/images/money2.jpg";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
@@ -261,17 +263,21 @@ const UploadPage = () => {
         </div>
       )}
       <div className="flex justify-between">
-        <div>
+        <div  className="text-white m-4">
           {user ? (
             <p>Welcome, {user.firstName}</p>
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-          <div>
-          <p className="left-0">Referral Earnings</p>
+            <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
+          <p class="left-0">Referral Earnings</p>
+
+          <div class="">
+            <p>Earnings: <span class="earnings-balance">[Your balance in Ksh]</span></p>
+          </div>
         </div>
+
         </div>
-        
         <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
           <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
           {error && <p className="text-red-500 mb-4">{error}</p>}
