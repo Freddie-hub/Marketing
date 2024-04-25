@@ -69,7 +69,7 @@ exports.stkPush = async (req, res) => {
     Password: `${encryptPassword()}`,
     Timestamp: formattedTime,
     TransactionType: "CustomerPayBillOnline",
-    Amount: "1",
+    Amount: "300",
     PartyA: `${phone}`,
     PartyB: "174379",
     // PhoneNumber: `${req.body.ClientPhoneNumber}`,

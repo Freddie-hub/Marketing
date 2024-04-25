@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import AppLoader from "../components/AppLoader";
 import { useNavigate } from "react-router-dom";
+import moneyImage from "../assets/images/money.jpeg";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
@@ -26,6 +27,7 @@ const UploadPage = () => {
       setAuthToken("");
     }
   }, []);
+
   const formatPhoneNumber = (phoneNumber) => {
     // Remove the initial zero if present
     const trimmedNumber = phoneNumber.replace(/^0/, "");
@@ -160,11 +162,23 @@ const UploadPage = () => {
 
   const handleUpload = async () => {
     setLoading(true);
+    
+    // Check if the user has already uploaded an image for the selected category today
+    const today = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+    const lastUploadTimestamp = localStorage.getItem(`${category}_upload_timestamp`);
+    
+    if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
+      setError(`You have already uploaded an image for ${category} today.`);
+      setLoading(false);
+      return;
+    }
+    
     if (!category || views === "") {
       setError("Please select category and enter valid views.");
       setLoading(false);
       return;
     }
+    
     setError("");
 
     // Multiply views by 2.5Ksh
@@ -190,6 +204,10 @@ const UploadPage = () => {
         const data = await response.json();
         // const data = await response;
         setResult(data);
+        
+        // Store the timestamp of the current upload
+        localStorage.setItem(`${category}_upload_timestamp`, new Date().toISOString());
+        
         // Clear inputs
         console.log("Data: ", data);
         alert(`Operation successful! ${data}`);
@@ -218,22 +236,15 @@ const UploadPage = () => {
       setLoading(false);
     }
   };
+
   const handleLogOut = () => {
     localStorage.removeItem("auth_token");
-    // setAuthToken("");
     navigate("/");
     window.location.reload();
   };
-  let firstName;
-  let userdetails;
-  if (user) {
-    // console.log("daab....", user);
-    firstName = user.firstName;
-    userdetails = user.toString();
-  }
 
   return (
-    <div className="relative">
+    <div style={{ backgroundImage: `url(${moneyImage})`, backgroundSize: 'cover', minHeight: '100vh', backgroundPosition: 'center' }}>
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
@@ -249,96 +260,104 @@ const UploadPage = () => {
           </div>
         </div>
       )}
-      <p className="hero-subtitle text-xl text-gray-600 mb-4">
-        {firstName ? `Welcome, ${firstName}` : "Rosemary and Jared Group"}
-      </p>
-      <p className="hero-subtitle text-xl text-gray-600 mb-4">
-        {userdetails
-          ? `userdetails to available, ${userdetails}`
-          : "Marketing on whole new level!"}
-      </p>
-      <div className="mx-auto max-w-md p-6 mt-8 bg-gray-100 rounded-lg shadow-md z-1">
-        <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <div className="mb-4">
-          <label
-            htmlFor="category"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            Select Category:
-          </label>
-          <select
-            id="category"
-            value={category}
-            onChange={handleCategoryChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="">Select...</option>
-            <option value="whatsapp">WhatsApp</option>
-            <option value="instagram">Instagram</option>
-            <option value="tiktok">TikTok</option>
-            <option value="facebook">Facebook</option>
-          </select>
+      <div className="flex justify-between">
+        <div>
+          {user ? (
+            <p>Welcome, {user.firstName}</p>
+          ) : (
+            <p>Welcome to the Upload Page</p>
+          )}
+          <div>
+          <p className="left-0">Referral Earnings</p>
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="views"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            Enter Views:
-          </label>
-          <input
-            type="number"
-            id="views"
-            value={views}
-            onChange={handleViewsChange}
-            className="w-full p-2 border rounded"
-          />
         </div>
-        <div className="mb-4">
-          <label
-            htmlFor="screenshot"
-            className="block text-gray-700 font-semibold mb-2"
+        
+        <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+          <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <div className="mb-4">
+            <label
+              htmlFor="category"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Select Category:
+            </label>
+            <select
+              id="category"
+              value={category}
+              onChange={handleCategoryChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value="">Select...</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="facebook">Facebook</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="views"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Enter Views:
+            </label>
+            <input
+              type="number"
+              id="views"
+              value={views}
+              onChange={handleViewsChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="screenshot"
+              className="block text-gray-700 font-semibold mb-2"
+            >
+              Screenshot Proof:
+            </label>
+            <input
+              type="file"
+              id="screenshot"
+              onChange={handleScreenshotChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <button
+            onClick={handleUpload}
+            className={
+              loading
+                ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+            }
+            style={{
+              pointerEvents: loading ? "none" : "auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Screenshot Proof:
-          </label>
-          <input
-            type="file"
-            id="screenshot"
-            onChange={handleScreenshotChange}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-        <button
-          onClick={handleUpload}
-          className={
-            loading
-              ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
-              : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-          }
-          style={{
-            pointerEvents: loading ? "none" : "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {loading ? "Loading...  " : "Upload"}
+            {loading ? "Loading...  " : "Upload"}
 
-          {loading && <AppLoader />}
-        </button>
-        <div className="mt-6">
-          {result && result.message && user.walletBalance == undefined && (
-            <h2 className="text-xl font-semibold">
-              Wallet Balance: {result ? result.walletBalance : 0} Ksh
-            </h2>
-          )}
-          {user && user.walletBalance && (
-            <h2 className="text-xl font-semibold">
-              {" "}
-              Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
-            </h2>
-          )}
+            {loading && <AppLoader />}
+          </button>
+          <div className="mt-6">
+            {result && result.message && user.walletBalance == undefined && (
+              <h2 className="text-xl font-semibold">
+                Wallet Balance: {result ? result.walletBalance : 0} Ksh
+              </h2>
+            )}
+            {user && user.walletBalance && (
+              <h2 className="text-xl font-semibold">
+                {" "}
+                Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
+              </h2>
+            )}
+          </div>
+        </div>
+        <div>
+          <p className="right-0">Withdraw</p>
         </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
@@ -349,7 +368,9 @@ const UploadPage = () => {
     </div>
   );
 };
+
 function getSavedToken() {
   return localStorage.getItem("auth_token");
 }
+
 export default UploadPage;
