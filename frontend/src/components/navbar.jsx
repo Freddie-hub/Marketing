@@ -59,7 +59,7 @@ export default function Navbar({ authToken, handleLogOut }) {
     }
   };
 
-  const generateCorrectRequestBody = () => {
+  const generateCorrectRequestBody = (clientPhoneNumber) => {
     if (referralCodeValue)
       return {
         ClientPhoneNumber: clientPhoneNumber,
@@ -84,7 +84,7 @@ export default function Navbar({ authToken, handleLogOut }) {
             "Content-Type": "application/json",
             "x-auth-token": `${getSavedToken()}`,
           },
-          body: JSON.stringify(generateCorrectRequestBody()),
+          body: JSON.stringify(generateCorrectRequestBody(clientPhoneNumber)),
         }
       );
 
@@ -92,6 +92,12 @@ export default function Navbar({ authToken, handleLogOut }) {
         console.log("Stk successful!");
         const userData = await response.json();
         console.log("Stk successful!", userData);
+        if (userData.Desc.includes("Cancelled")) {
+          alert(
+            "Seems you cancelled the payment. You have to clear it before proceeding."
+          );
+          setMpesaLoading(false);
+        }
         handleFetchUser();
         setMpesaLoading(false);
       } else {

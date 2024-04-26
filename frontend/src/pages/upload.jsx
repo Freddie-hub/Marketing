@@ -92,7 +92,9 @@ const UploadPage = () => {
         const userData = await response.json();
         console.log("Link for today's work updated accordingly!", userData);
         setUser(userData);
+        //reload
         setLinkloading(false);
+        window.location.reload();
         // setLoading(false);
       } else {
         // Handle fetch error
@@ -638,6 +640,8 @@ const UploadPage = () => {
           <div className="mb-4">
             <img
               src={todaysWork ? todaysWork.todaysJob : moneyImage}
+              //copilot make its size small
+              style={{ width: "10rem", height: "10rem" }}
               alt="Today's work"
               className="w-full p-2 border rounded"
             />
