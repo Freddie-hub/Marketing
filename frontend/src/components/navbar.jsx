@@ -156,7 +156,7 @@ export default function Navbar({ authToken, handleLogOut }) {
         } else {
           //make a button for activating account which opens a pop up
           if (userloading) return <AppLoader />;
-          if (!user.IsEligibleToWork)
+          if (user && !user.IsEligibleToWork)
             return (
               <Modal innerText="Activate Account" className="right-4">
                 <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
