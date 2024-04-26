@@ -61,6 +61,37 @@ const UploadPage = () => {
       setLoading(false);
     }
   };
+  //call server to do handleRequestPayment
+  const handleRequestPayment = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/requestPayment",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const resp = await response.text();
+        console.log(resp);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error occurred:", data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error occurred: " + error.message);
+      console.error("Error occurred:", error.message);
+      setLoading(false);
+    }
+  };
 
   const handleTriggerStk = async () => {
     setMpesaLoading(true);
@@ -173,13 +204,13 @@ const UploadPage = () => {
       setLoading(false);
       return;
     }
-    
+
     if (!category || views === "") {
       setError("Please select category and enter valid views.");
       setLoading(false);
       return;
     }
-    
+
     setError("");
 
     const earnings = parseFloat(views) * 2.5;
@@ -201,9 +232,14 @@ const UploadPage = () => {
       if (response.ok) {
         const data = await response.json();
         setResult(data);
-        
-        localStorage.setItem(`${category}_upload_timestamp`, new Date().toISOString());
-        
+
+        // Store the timestamp of the current upload
+        localStorage.setItem(
+          `${category}_upload_timestamp`,
+          new Date().toISOString()
+        );
+
+        // Clear inputs
         console.log("Data: ", data);
         alert(`Operation successful! ${data}`);
         setCategory("");
@@ -254,6 +290,7 @@ const UploadPage = () => {
         setLoading(false);
       } else if (withdrawalType === "referral") {
         // Make API call with withdrawalAmount
+        handleRequestPayment();
         setLoading(false);
       }
     } catch (error) {
@@ -269,7 +306,14 @@ const UploadPage = () => {
   };
 
   return (
-    <div style={{ backgroundImage: `url(${moneyImage})`, backgroundSize: 'cover', minHeight: '100vh', backgroundPosition: 'center' }}>
+    <div
+      style={{
+        backgroundImage: `url(${moneyImage})`,
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        backgroundPosition: "center",
+      }}
+    >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
@@ -292,10 +336,20 @@ const UploadPage = () => {
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-          <div class="text-orange mt-10 referral-wallet border-2 border-red-400 border-solid rounded">
-            <p class="left-0">Referral Earnings</p>
+          <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
+            <p class="left-0">
+              Referral Earnings{": Kes "}
+              {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
+            </p>
+
             <div class="">
-              <p>Earnings: <span class="earnings-balance">Ksh 0</span></p>
+              <p>
+                Earnings:{" "}
+                <span class="earnings-balance">
+                  {": Kes "}
+                  {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
+                </span>
+              </p>
             </div>
           </div>
         </div>
@@ -330,6 +384,7 @@ const UploadPage = () => {
               Enter Views:
             </label>
             <input
+            placeholder="Number of Views"
               type="number"
               id="views"
               value={views}
@@ -404,6 +459,22 @@ const UploadPage = () => {
                 style={{ pointerEvents: loading ? "none" : "auto" }}
               >
                 {loading ? "Processing..." : "Submit"}
+              </button>
+            </form>
+          </div>
+          <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+            <h2 className="text-xl font-semibold">Submit Link</h2>
+            <form onSubmit={handleSubmitLink} className="mt-4 ">
+              <div className="mb-4">
+                <label htmlFor="link" className="block text-gray-700 font-semibold mb-2">Enter Link:</label>
+                <input type="text" id="link" value={link} onChange={handleLinkChange} className="w-full p-2 border rounded" />
+              </div>
+              <button
+                type="submit"
+                className={linkLoading ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600" : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"}
+                style={{ pointerEvents: linkLoading ? "none" : "auto" }}
+              >
+                {linkLoading ? "Processing..." : "Submit"}
               </button>
             </form>
           </div>
