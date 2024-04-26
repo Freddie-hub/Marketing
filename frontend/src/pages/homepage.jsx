@@ -18,7 +18,7 @@ const HomePage = () => {
   useEffect(() => {
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) setAuthToken(authenticatedToken);
-    if (!authenticatedToken) navigate("/login");
+    // if (!authenticatedToken) navigate("/login");
     setShowContent(true);
     // if (authenticatedToken) handleFetchUser();
   }, []);
