@@ -473,6 +473,7 @@ const UploadPage = () => {
                 Screenshot Proof:
               </label>
               <input
+              required
                 type="file"
                 id="screenshot"
                 onChange={handleScreenshotChange}
@@ -587,14 +588,8 @@ const UploadPage = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${moneyImage})`,
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${moneyImage})` }}>
+
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">

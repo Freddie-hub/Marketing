@@ -13,6 +13,7 @@ export default function Navbar({ authToken, handleLogOut }) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState();
   const [referralCodeValue, setReferralCodeValue] = useState("");
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
 
   const handleFetchUser = async () => {
@@ -216,11 +217,29 @@ export default function Navbar({ authToken, handleLogOut }) {
         </div>
       )}
       <nav className="bg-gray-800 p-4">
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container mx-auto flex justify-between items-center flex-wrap">
           <a href="/" className="text-white font-bold text-lg">
             R and J Group
           </a>
-          <ul className="flex">
+          {/* Responsive navigation toggler */}
+          <button
+            className={`text-white lg:hidden ${showMobileMenu ? "fixed top-4 right-4" : "relative"}`}
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+          >
+            <svg
+               className={`w-6 h-6 fill-current ${showMobileMenu ? "hidden" : "block"}`} // Changed classes for dynamic visibility
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2 3h16a1 1 0 010 2H2a1 1 0 010-2zm0 6h16a1 1 0 010 2H2a1 1 0 010-2zm0 6h16a1 1 0 010 2H2a1 1 0 010-2z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+          <div className={`lg:flex items-center justify-end ${showMobileMenu ? "fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-90 flex flex-col justify-center" : "hidden"}`}>
+          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
             <li className="mr-5">
               <a href="/" className="text-white">
                 Home
@@ -485,6 +504,7 @@ export default function Navbar({ authToken, handleLogOut }) {
               </a>
             </li>
           </ul>
+          </div>
           <div className="flex items-center gap-2">
             <TheRightButtonGenerator
               token={authToken}
@@ -540,6 +560,7 @@ export default function Navbar({ authToken, handleLogOut }) {
                       />
                     </svg>
                   </div>
+                
                   {loading && <AppLoader />}
                   {user != null && (
                     <ul className="ml-5 mt-3 mb-5 padding-5 ">
@@ -562,6 +583,7 @@ export default function Navbar({ authToken, handleLogOut }) {
                         </p>
                       </li>
                     </ul>
+                  
                   )}
                   {user == null && (
                     <p className="text-black">
@@ -569,6 +591,7 @@ export default function Navbar({ authToken, handleLogOut }) {
                     </p>
                   )}
                 </div>
+                
               )}
             </div>
           </div>

@@ -29,15 +29,15 @@ const HomePage = () => {
       animate={{ opacity: 1, rotateY: 0 }}
       exit={{ opacity: 0, rotateY: 180 }}
       transition={{ duration: 1 }}
-      className="min-h-screen bg-gradient-to-r from-purple-200 to-blue-200 overflow-hidden"
+      className="min-h-screen bg-gradient-to-r from-purple-200 to-blue-200 overflow-hidden relative"
     >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       <AnimatePresence>
         {showContent && (
           <motion.div key="container" className="container mx-auto px-4 py-8">
             <section className="section hero">
-              <div className="flex justify-center items-center my-8">
-                <div className="hero-content mr-8 ml-4">
+              <div className="flex flex-col md:flex-row justify-center items-center my-8">
+                <div className="hero-content md:mr-8 md:ml-4 mb-8 md:mb-0">
                   <p className="hero-subtitle text-xl text-gray-600 mb-4">
                     {user.firstName
                       ? `Welcome, ${user.firstName}`
@@ -62,7 +62,7 @@ const HomePage = () => {
                     width="720"
                     height="673"
                     alt="hero banner"
-                    className="w-100"
+                    className="w-full md:w-auto"
                   />
                 </figure>
               </div>

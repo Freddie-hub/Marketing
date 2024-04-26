@@ -167,6 +167,7 @@ const SignUp = ({ toggleForms }) => {
             <input
               type="password"
               placeholder="Password"
+              autoComplete="off"
               value={password}
               onChange={(e) => setPassword(e.target.value.toString())}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
@@ -310,6 +311,7 @@ const Login = ({ toggleForms }) => {
             <input
               type="password"
               placeholder="Password"
+              autoComplete="off"
               value={password}
               onChange={(e) => setPassword(e.target.value.toString())}
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
