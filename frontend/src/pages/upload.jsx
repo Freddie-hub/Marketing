@@ -7,8 +7,10 @@ import moneyImage from "../assets/images/money.jpeg";
 const UploadPage = () => {
   const [category, setCategory] = useState("");
   const [views, setViews] = useState("");
+  const [linkValue, setLinkValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [mpesaloading, setMpesaLoading] = useState(false);
+  const [linkLoading, setLinkloading] = useState(false);
   const [result, setResult] = useState();
   const [balance, setBalance] = useState(0);
   const [screenshot, setScreenshot] = useState(null);
@@ -18,7 +20,7 @@ const UploadPage = () => {
   const [authToken, setAuthToken] = useState();
   const [withdrawalType, setWithdrawalType] = useState("monthly");
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
-  
+
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
@@ -58,6 +60,47 @@ const UploadPage = () => {
     } catch (error) {
       alert("Error fetching user details: " + error.message);
       console.error("Error fetching user details:", error.message);
+      setLoading(false);
+    }
+  };
+  const handleSubmitTodaysWork = async () => {
+    setLoading(true);
+    setLinkloading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/updateTodaysWork",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${getSavedToken()}`,
+          },
+          body: JSON.stringify({
+            adminImgForWorkLink: linkValue,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("Link for today's work updated accordingly!", userData);
+        setUser(userData);
+        setLinkloading(false);
+        setLoading(false);
+      } else {
+        // Handle fetch user error
+        const data = await response.text();
+        console.error("Error occurred when performing the update :", data);
+        setLinkloading(false);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert("Error occurred when performing the update : " + error.message);
+      console.error(
+        "Error occurred when performing the update :",
+        error.message
+      );
+      setLinkloading(false);
       setLoading(false);
     }
   };
@@ -195,10 +238,12 @@ const UploadPage = () => {
 
   const handleUpload = async () => {
     setLoading(true);
-    
+
     const today = new Date().toISOString().slice(0, 10);
-    const lastUploadTimestamp = localStorage.getItem(`${category}_upload_timestamp`);
-    
+    const lastUploadTimestamp = localStorage.getItem(
+      `${category}_upload_timestamp`
+    );
+
     if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
       setError(`You have already uploaded an image for ${category} today.`);
       setLoading(false);
@@ -268,7 +313,6 @@ const UploadPage = () => {
     }
   };
 
-
   const handleWithdrawalTypeChange = (e) => {
     setWithdrawalType(e.target.value);
   };
@@ -283,7 +327,7 @@ const UploadPage = () => {
   const handleWithdrawalSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       if (withdrawalType === "monthly") {
         alert("Payments will be disbursed after every 30 days.");
@@ -384,7 +428,7 @@ const UploadPage = () => {
               Enter Views:
             </label>
             <input
-            placeholder="Number of Views"
+              placeholder="Number of Views"
               type="number"
               id="views"
               value={views}
@@ -438,46 +482,86 @@ const UploadPage = () => {
           </div>
         </div>
         <div className="mt-6 mr-10 bg-slate-50 p-6 rounded">
-            <h2 className="text-xl font-semibold">Withdrawal</h2>
-            <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
-              <div className="mb-4">
-                <label htmlFor="withdrawalType" className="block text-gray-700 font-semibold mb-2">Withdrawal Type:</label>
-                <select id="withdrawalType" value={withdrawalType} onChange={handleWithdrawalTypeChange} className="w-full p-2 border rounded">
-                  <option value="referral">Referral Earnings</option>
-                  <option value="monthly">Monthly Earnings</option>
-                </select>
-              </div>
-              {withdrawalType === "referral" && (
-                <div className="mb-4">
-                  <label htmlFor="withdrawalAmount" className="block text-gray-700 font-semibold mb-2">Enter Amount:</label>
-                  <input type="number" id="withdrawalAmount" value={withdrawalAmount} onChange={handleWithdrawalAmountChange} className="w-full p-2 border rounded" />
-                </div>
-              )}
-              <button
-                type="submit"
-                className={loading ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600" : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"}
-                style={{ pointerEvents: loading ? "none" : "auto" }}
+          <h2 className="text-xl font-semibold">Withdrawal</h2>
+          <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
+            <div className="mb-4">
+              <label
+                htmlFor="withdrawalType"
+                className="block text-gray-700 font-semibold mb-2"
               >
-                {loading ? "Processing..." : "Submit"}
-              </button>
-            </form>
-          </div>
-          <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
-            <h2 className="text-xl font-semibold">Submit Link</h2>
-            <form onSubmit={handleSubmitLink} className="mt-4 ">
-              <div className="mb-4">
-                <label htmlFor="link" className="block text-gray-700 font-semibold mb-2">Enter Link:</label>
-                <input type="text" id="link" value={link} onChange={handleLinkChange} className="w-full p-2 border rounded" />
-              </div>
-              <button
-                type="submit"
-                className={linkLoading ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600" : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"}
-                style={{ pointerEvents: linkLoading ? "none" : "auto" }}
+                Withdrawal Type:
+              </label>
+              <select
+                id="withdrawalType"
+                value={withdrawalType}
+                onChange={handleWithdrawalTypeChange}
+                className="w-full p-2 border rounded"
               >
-                {linkLoading ? "Processing..." : "Submit"}
-              </button>
-            </form>
-          </div>
+                <option value="referral">Referral Earnings</option>
+                <option value="monthly">Monthly Earnings</option>
+              </select>
+            </div>
+            {withdrawalType === "referral" && (
+              <div className="mb-4">
+                <label
+                  htmlFor="withdrawalAmount"
+                  className="block text-gray-700 font-semibold mb-2"
+                >
+                  Enter Amount:
+                </label>
+                <input
+                  type="number"
+                  id="withdrawalAmount"
+                  value={withdrawalAmount}
+                  onChange={handleWithdrawalAmountChange}
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+            )}
+            <button
+              type="submit"
+              className={
+                loading
+                  ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                  : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+              }
+              style={{ pointerEvents: loading ? "none" : "auto" }}
+            >
+              {loading ? "Processing..." : "Submit"}
+            </button>
+          </form>
+        </div>
+        <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+          <h2 className="text-xl font-semibold">Submit Link</h2>
+          <form onSubmit={() => handleSubmitTodaysWork()} className="mt-4 ">
+            <div className="mb-4">
+              <label
+                htmlFor="link"
+                className="block text-gray-700 font-semibold mb-2"
+              >
+                Enter Link:
+              </label>
+              <input
+                type="text"
+                id="link"
+                value={linkValue}
+                onChange={(e) => setLinkValue(e.target.value)}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <button
+              type="submit"
+              className={
+                linkLoading
+                  ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                  : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+              }
+              style={{ pointerEvents: linkLoading ? "none" : "auto" }}
+            >
+              {linkLoading ? "Processing..." : "Submit"}
+            </button>
+          </form>
+        </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>

@@ -8,6 +8,7 @@ export default function Navbar({ authToken, handleLogOut }) {
   //make state for showing User Profile
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userloading, setUserloading] = useState(false);
   const [mpesaloading, setMpesaLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState();
@@ -16,6 +17,7 @@ export default function Navbar({ authToken, handleLogOut }) {
 
   const handleFetchUser = async () => {
     setLoading(true);
+    setUserloading(true);
     setUser(null);
     try {
       const response = await fetch(
@@ -36,11 +38,13 @@ export default function Navbar({ authToken, handleLogOut }) {
         if (!userData.IsEligibleToWork) {
           navigate("/");
         }
+        setUserloading(false);
         setLoading(false);
       } else {
         // Handle fetch user error
         const data = await response.text();
         console.error("Error fetching user:", data);
+        setUserloading(false);
         setLoading(false);
       }
     } catch (error) {
@@ -50,6 +54,7 @@ export default function Navbar({ authToken, handleLogOut }) {
       );
       navigate("/login");
       console.error("Error fetching user details:", error.message);
+      setUserloading(false);
       setLoading(false);
     }
   };
@@ -79,9 +84,7 @@ export default function Navbar({ authToken, handleLogOut }) {
             "Content-Type": "application/json",
             "x-auth-token": `${getSavedToken()}`,
           },
-          body: JSON.stringify({
-            ClientPhoneNumber: clientPhoneNumber,
-          }),
+          body: JSON.stringify(generateCorrectRequestBody()),
         }
       );
 
@@ -137,33 +140,35 @@ export default function Navbar({ authToken, handleLogOut }) {
         );
       } else {
         //make a button for activating account which opens a pop up
-        return (
-          <Modal innerText="Activate Account" className="right-4">
-            <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
-              <p>
-                Enter Referral Code below. If you were not referred leave it
-                blank{" "}
-              </p>
-              <input
-                placeholder="Referral Code"
-                className="mt-4 mb-4 p-2 mr-3 rounded"
-                value={referralCodeValue}
-                onChange={(e) => setReferralCodeValue(e.target.value)}
-              />
-              <button
-                onClick={() => {
-                  //make a fetch call to the backend to activate the account
-                  //if successful, show a success message
-                  //if not successful, show an error message
-                  handleTriggerStk();
-                }}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Initiate Mpesa Payment
-              </button>
-            </div>
-          </Modal>
-        );
+        if (userloading) return <AppLoader />;
+        if (!condition)
+          return (
+            <Modal innerText="Activate Account" className="right-4">
+              <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
+                <p>
+                  Enter Referral Code below. If you were not referred leave it
+                  blank{" "}
+                </p>
+                <input
+                  placeholder="Referral Code"
+                  className="mt-4 mb-4 p-2 mr-3 rounded"
+                  value={referralCodeValue}
+                  onChange={(e) => setReferralCodeValue(e.target.value)}
+                />
+                <button
+                  onClick={() => {
+                    //make a fetch call to the backend to activate the account
+                    //if successful, show a success message
+                    //if not successful, show an error message
+                    handleTriggerStk();
+                  }}
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Initiate Mpesa Payment
+                </button>
+              </div>
+            </Modal>
+          );
       }
     } else {
       return (
