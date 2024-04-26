@@ -343,194 +343,9 @@ const UploadPage = () => {
     }
   };
 
-  const handleLogOut = () => {
-    localStorage.removeItem("auth_token");
-    navigate("/");
-    window.location.reload();
-  };
-
-  return (
-    <div
-      style={{
-        backgroundImage: `url(${moneyImage})`,
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        backgroundPosition: "center",
-      }}
-    >
-      <Navbar authToken={authToken} handleLogOut={handleLogOut} />
-      {mpesaloading && (
-        <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
-          <div className="flex flex-col items-center justify-center w-full">
-            <h1 className="text-4xl font-semibold text-center">
-              We've sent a request to Mpesa
-            </h1>
-            <p className="text-xl font-semibold text-center">
-              Once the request is processed you will be able to pay and start
-              working.
-            </p>
-            {mpesaloading && <AppLoader />}
-          </div>
-        </div>
-      )}
-      <div className="flex justify-between">
-        <div className="text-white m-4">
-          {user ? (
-            <p>Welcome, {user.firstName}</p>
-          ) : (
-            <p>Welcome to the Upload Page</p>
-          )}
-          <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
-            <p class="left-0">
-              Referral Earnings{": Kes "}
-              {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
-            </p>
-
-            <div class="">
-              <p>
-                Earnings:{" "}
-                <span class="earnings-balance">
-                  {": Kes "}
-                  {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
-                </span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
-          <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
-          <div className="mb-4">
-            <label
-              htmlFor="category"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Select Category:
-            </label>
-            <select
-              id="category"
-              value={category}
-              onChange={handleCategoryChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value="">Select...</option>
-              <option value="whatsapp">WhatsApp</option>
-              <option value="instagram">Instagram</option>
-              <option value="tiktok">TikTok</option>
-              <option value="facebook">Facebook</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="views"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Enter Views:
-            </label>
-            <input
-              placeholder="Number of Views"
-              type="number"
-              id="views"
-              value={views}
-              onChange={handleViewsChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="screenshot"
-              className="block text-gray-700 font-semibold mb-2"
-            >
-              Screenshot Proof:
-            </label>
-            <input
-              type="file"
-              id="screenshot"
-              onChange={handleScreenshotChange}
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <button
-            onClick={handleUpload}
-            className={
-              loading
-                ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
-                : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-            }
-            style={{
-              pointerEvents: loading ? "none" : "auto",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {loading ? "Loading...  " : "Upload"}
-            {loading && <AppLoader />}
-          </button>
-          <div className="mt-6">
-            {result && result.message && user.walletBalance == undefined && (
-              <h2 className="text-xl font-semibold">
-                Wallet Balance: {result ? result.walletBalance : 0} Ksh
-              </h2>
-            )}
-            {user && user.walletBalance && (
-              <h2 className="text-xl font-semibold">
-                {" "}
-                Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
-              </h2>
-            )}
-          </div>
-        </div>
-        <div className="mt-6 mr-10 bg-slate-50 p-6 rounded">
-          <h2 className="text-xl font-semibold">Withdrawal</h2>
-          <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
-            <div className="mb-4">
-              <label
-                htmlFor="withdrawalType"
-                className="block text-gray-700 font-semibold mb-2"
-              >
-                Withdrawal Type:
-              </label>
-              <select
-                id="withdrawalType"
-                value={withdrawalType}
-                onChange={handleWithdrawalTypeChange}
-                className="w-full p-2 border rounded"
-              >
-                <option value="referral">Referral Earnings</option>
-                <option value="monthly">Monthly Earnings</option>
-              </select>
-            </div>
-            {withdrawalType === "referral" && (
-              <div className="mb-4">
-                <label
-                  htmlFor="withdrawalAmount"
-                  className="block text-gray-700 font-semibold mb-2"
-                >
-                  Enter Amount:
-                </label>
-                <input
-                  type="number"
-                  id="withdrawalAmount"
-                  value={withdrawalAmount}
-                  onChange={handleWithdrawalAmountChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-            )}
-            <button
-              type="submit"
-              className={
-                loading
-                  ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
-                  : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-              }
-              style={{ pointerEvents: loading ? "none" : "auto" }}
-            >
-              {loading ? "Processing..." : "Submit"}
-            </button>
-          </form>
-        </div>
+  const getTheRightForm = () => {
+    if (user && user.isAdmin == true) {
+      return (
         <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
           <h2 className="text-xl font-semibold">Submit Link</h2>
           <form onSubmit={() => handleSubmitTodaysWork()} className="mt-4 ">
@@ -562,6 +377,205 @@ const UploadPage = () => {
             </button>
           </form>
         </div>
+      );
+    } else {
+      return (
+        <>
+          <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+            <h1 className="text-3xl font-semibold mb-6">Upload Page</h1>
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            <div className="mb-4">
+              <label
+                htmlFor="category"
+                className="block text-gray-700 font-semibold mb-2"
+              >
+                Select Category:
+              </label>
+              <select
+                id="category"
+                value={category}
+                onChange={handleCategoryChange}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select...</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="instagram">Instagram</option>
+                <option value="tiktok">TikTok</option>
+                <option value="facebook">Facebook</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="views"
+                className="block text-gray-700 font-semibold mb-2"
+              >
+                Enter Views:
+              </label>
+              <input
+                placeholder="Number of Views"
+                type="number"
+                id="views"
+                value={views}
+                onChange={handleViewsChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="screenshot"
+                className="block text-gray-700 font-semibold mb-2"
+              >
+                Screenshot Proof:
+              </label>
+              <input
+                type="file"
+                id="screenshot"
+                onChange={handleScreenshotChange}
+                className="w-full p-2 border rounded"
+              />
+            </div>
+            <button
+              onClick={handleUpload}
+              className={
+                loading
+                  ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                  : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+              }
+              style={{
+                pointerEvents: loading ? "none" : "auto",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {loading ? "Loading...  " : "Upload"}
+              {loading && <AppLoader />}
+            </button>
+            <div className="mt-6">
+              {result && result.message && user.walletBalance == undefined && (
+                <h2 className="text-xl font-semibold">
+                  Wallet Balance: {result ? result.walletBalance : 0} Ksh
+                </h2>
+              )}
+              {user && user.walletBalance && (
+                <h2 className="text-xl font-semibold">
+                  {" "}
+                  Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
+                </h2>
+              )}
+            </div>
+          </div>
+          <div className="mt-6 mr-10 bg-slate-50 p-6 rounded">
+            <h2 className="text-xl font-semibold">Withdrawal</h2>
+            <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
+              <div className="mb-4">
+                <label
+                  htmlFor="withdrawalType"
+                  className="block text-gray-700 font-semibold mb-2"
+                >
+                  Withdrawal Type:
+                </label>
+                <select
+                  id="withdrawalType"
+                  value={withdrawalType}
+                  onChange={handleWithdrawalTypeChange}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="referral">Referral Earnings</option>
+                  <option value="monthly">Monthly Earnings</option>
+                </select>
+              </div>
+              {withdrawalType === "referral" && (
+                <div className="mb-4">
+                  <label
+                    htmlFor="withdrawalAmount"
+                    className="block text-gray-700 font-semibold mb-2"
+                  >
+                    Enter Amount:
+                  </label>
+                  <input
+                    type="number"
+                    id="withdrawalAmount"
+                    value={withdrawalAmount}
+                    onChange={handleWithdrawalAmountChange}
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                className={
+                  loading
+                    ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
+                    : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+                }
+                style={{ pointerEvents: loading ? "none" : "auto" }}
+              >
+                {loading ? "Processing..." : "Submit"}
+              </button>
+            </form>
+          </div>
+        </>
+      );
+    }
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("auth_token");
+    navigate("/");
+    window.location.reload();
+  };
+
+  return (
+    <div
+      style={{
+        backgroundImage: `url(${moneyImage})`,
+        backgroundSize: "cover",
+        minHeight: "100vh",
+        backgroundPosition: "center",
+      }}
+    >
+      <Navbar authToken={authToken} handleLogOut={handleLogOut} />
+      {mpesaloading && (
+        <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
+          <div className="flex flex-col items-center justify-center w-full">
+            <h1 className="text-4xl font-semibold text-center">
+              We've sent a request to Mpesa
+            </h1>
+            <p className="text-xl font-semibold text-center">
+              Once the request is processed you will be able to pay and start
+              working.
+            </p>
+            {mpesaloading && <AppLoader />}
+          </div>
+        </div>
+      )}
+      <div className="flex justify-between" style={{ minHeight: "81.4vh" }}>
+        <div className="text-white m-4">
+          {user ? (
+            <p>Welcome, {user.firstName}</p>
+          ) : (
+            <p>Welcome to the Upload Page</p>
+          )}
+          <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
+            <p class="left-0">
+              Referral Earnings{": Kes "}
+              {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
+            </p>
+
+            <div class="">
+              <p>
+                Earnings:{" "}
+                <span class="earnings-balance">
+                  {": Kes "}
+                  {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {getTheRightForm()}
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>
