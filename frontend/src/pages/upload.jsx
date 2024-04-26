@@ -498,15 +498,15 @@ const UploadPage = () => {
               {loading && <AppLoader />}
             </button>
             <div className="mt-6">
+              {"Wallet Balance: Ksh "}
               {result && result.message && user.walletBalance == undefined && (
                 <h2 className="text-xl font-semibold">
-                  Wallet Balance: {result ? result.walletBalance : 0} Ksh
+                  {result ? result.walletBalance : 0}
                 </h2>
               )}
               {user && user.walletBalance && (
                 <h2 className="text-xl font-semibold">
-                  {" "}
-                  Wallet Balance: {user ? user.walletBalance : 0} Ksh{" "}
+                  {user ? user.walletBalance : 0} Ksh{" "}
                 </h2>
               )}
             </div>
@@ -618,7 +618,7 @@ const UploadPage = () => {
               {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
             </p>
 
-            <div className="">
+            {/* <div className="">
               <p>
                 Earnings:{" "}
                 <span className="earnings-balance">
@@ -626,7 +626,7 @@ const UploadPage = () => {
                   {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
                 </span>
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
         {getTheRightForm()}

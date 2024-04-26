@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./modal";
 import { CircleUserRound } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppLoader from "./AppLoader";
 
 export default function Navbar({ authToken, handleLogOut }) {
@@ -15,6 +15,13 @@ export default function Navbar({ authToken, handleLogOut }) {
   const [referralCodeValue, setReferralCodeValue] = useState("");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
+  //a way to tell the current active navigation route
+  const location = useLocation().pathname;
+  const showTheButton = () => {
+    
+    if (location == "/upload") return false;
+    else return true;
+  };
 
   const handleFetchUser = async () => {
     setLoading(true);
@@ -135,59 +142,60 @@ export default function Navbar({ authToken, handleLogOut }) {
   };
 
   const isUserAbleToStartWorking = () => {
-    if (authToken) {
-      if (user && user.IsEligibleToWork) {
+    if (showTheButton())
+      if (authToken) {
+        if (user && user.IsEligibleToWork) {
+          return (
+            <a
+              href="/upload"
+              className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Go To Working Page
+            </a>
+          );
+        } else {
+          //make a button for activating account which opens a pop up
+          if (userloading) return <AppLoader />;
+          if (!user.IsEligibleToWork)
+            return (
+              <Modal innerText="Activate Account" className="right-4">
+                <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
+                  <p>
+                    Enter Referral Code below. If you were not referred leave it
+                    blank{" "}
+                  </p>
+                  <input
+                    placeholder="Referral Code"
+                    className="mt-4 mb-4 p-2 mr-3 rounded"
+                    value={referralCodeValue}
+                    onChange={(e) => setReferralCodeValue(e.target.value)}
+                  />
+                  <button
+                    onClick={() => {
+                      //make a fetch call to the backend to activate the account
+                      //if successful, show a success message
+                      //if not successful, show an error message
+                      handleTriggerStk();
+                    }}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Initiate Mpesa Payment
+                  </button>
+                </div>
+              </Modal>
+            );
+        }
+      } else {
         return (
           <a
-            href="/upload"
+            href="/login"
             className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
           >
-            Go To Working Page
+            {" "}
+            Start Working
           </a>
         );
-      } else {
-        //make a button for activating account which opens a pop up
-        if (userloading) return <AppLoader />;
-        if (!user.IsEligibleToWork)
-          return (
-            <Modal innerText="Activate Account" className="right-4">
-              <div className="max-h-80  px-6 py-4 border-4 border-red-500 rounded-lg ">
-                <p>
-                  Enter Referral Code below. If you were not referred leave it
-                  blank{" "}
-                </p>
-                <input
-                  placeholder="Referral Code"
-                  className="mt-4 mb-4 p-2 mr-3 rounded"
-                  value={referralCodeValue}
-                  onChange={(e) => setReferralCodeValue(e.target.value)}
-                />
-                <button
-                  onClick={() => {
-                    //make a fetch call to the backend to activate the account
-                    //if successful, show a success message
-                    //if not successful, show an error message
-                    handleTriggerStk();
-                  }}
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Initiate Mpesa Payment
-                </button>
-              </div>
-            </Modal>
-          );
       }
-    } else {
-      return (
-        <a
-          href="/login"
-          className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-        >
-          {" "}
-          Start Working
-        </a>
-      );
-    }
   };
 
   useEffect(() => {
