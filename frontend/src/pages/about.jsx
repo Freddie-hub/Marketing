@@ -20,15 +20,15 @@ const AboutSection = () => {
       initial={{ opacity: 0, rotateY: -180 }}
       animate={{ opacity: 1, rotateY: 0 }}
       exit={{ opacity: 0, rotateY: 180 }}
-      transition={{duration: 2}}
+      transition={{duration: 1}}
       className="min-h-screen bg-gradient-to-r from-purple-200 to-blue-200 overflow-hidden"
     >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       <section className="flex flex-wrap items-center justify-center p-8">
         <div className="w-full lg:w-1/2">
           <div className="lg:mx-8 mb-8 lg:mb-0">
-            <div className="relative">
-              <img src={aboutImage} alt="About Banner" className="rounded-lg" />
+            <div className="">
+              <img src={aboutImage} alt="About Banner" className="rounded-lg z-0" />
               {/* <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4">
               </button> */}
             </div>

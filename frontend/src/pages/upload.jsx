@@ -473,6 +473,7 @@ const UploadPage = () => {
                 Screenshot Proof:
               </label>
               <input
+              required
                 type="file"
                 id="screenshot"
                 onChange={handleScreenshotChange}
@@ -510,10 +511,10 @@ const UploadPage = () => {
               )}
             </div>
           </div>
-          <div className="mt-6 mr-10 bg-slate-50 p-6 rounded">
+          <div className="mt-3 ml-3 mr-3 bg-slate-50 p-6 rounded ">
             <h2 className="text-xl font-semibold">Withdrawal</h2>
             <form onSubmit={handleWithdrawalSubmit} className="mt-4 ">
-              <div className="mb-4">
+              <div className="mb-4 ">
                 <label
                   htmlFor="withdrawalType"
                   className="block text-gray-700 font-semibold mb-2"
@@ -587,14 +588,8 @@ const UploadPage = () => {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${moneyImage})`,
-        backgroundSize: "cover",
-        minHeight: "100vh",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${moneyImage})` }}>
+
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
@@ -610,7 +605,7 @@ const UploadPage = () => {
           </div>
         </div>
       )}
-      <div className="flex justify-between" style={{ minHeight: "81.4vh" }}>
+      <div className="flex flex-col md:flex-row justify-between" style={{ minHeight: "81.4vh" }}>
         <div className="text-white m-4">
           {user ? (
             <p>Welcome, {user.firstName}</p>
@@ -635,8 +630,8 @@ const UploadPage = () => {
           </div>
         </div>
         {getTheRightForm()}
-        <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
-          <h2 className="text-xl font-semibold">Today's Work</h2>
+        <div className="mx-auto mb-4 max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+          <h2 className="text-xl font-semibold">Tomorrow's's Work</h2>
           <div className="mb-4">
             <img
               src={todaysWork ? todaysWork.todaysJob : moneyImage}
