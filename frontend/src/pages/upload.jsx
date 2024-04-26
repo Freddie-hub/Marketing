@@ -14,6 +14,7 @@ const UploadPage = () => {
   const [result, setResult] = useState();
   const [balance, setBalance] = useState(0);
   const [screenshot, setScreenshot] = useState(null);
+  const [todaysWork, setTodaysWork] = useState(null);
   const [error, setError] = useState("");
   const [user, setUser] = useState();
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const UploadPage = () => {
     if (authenticatedToken) {
       setAuthToken(authenticatedToken);
       handleFetchUser();
+      handleGetTodaysWork();
     } else {
       setAuthToken("");
     }
@@ -64,7 +66,13 @@ const UploadPage = () => {
     }
   };
   const handleSubmitTodaysWork = async () => {
-    setLoading(true);
+    // e.preventDefault();
+    // setLoading(true);
+    console.log("Clickd..........");
+    if (linkValue === "") {
+      alert("Please enter a valid link");
+      return;
+    }
     setLinkloading(true);
     try {
       const response = await fetch(
@@ -80,25 +88,25 @@ const UploadPage = () => {
           }),
         }
       );
-
       if (response.ok) {
         const userData = await response.json();
         console.log("Link for today's work updated accordingly!", userData);
         setUser(userData);
         setLinkloading(false);
-        setLoading(false);
+        // setLoading(false);
       } else {
-        // Handle fetch user error
+        // Handle fetch error
         const data = await response.text();
         console.error("Error occurred when performing the update :", data);
         setLinkloading(false);
-        setLoading(false);
+        // setLoading(false);
       }
     } catch (error) {
       alert("Error occurred when performing the update : " + error.message);
       console.error(
         "Error occurred when performing the update :",
-        error.message
+        error.message,
+        error.status
       );
       setLinkloading(false);
       setLoading(false);
@@ -235,6 +243,40 @@ const UploadPage = () => {
       setLoading(false);
     }
   };
+  const handleGetTodaysWork = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://rnrclone.onrender.com/api/users/getTodaysWork",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": localStorage.getItem("auth_token"),
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setTodaysWork(data);
+        for (let key in data) {
+          console.log(`${key}: ${data[key]}`);
+        }
+        console.log("Todays Work:            ....");
+        setLoading(false);
+      } else {
+        const data = await response.text();
+        alert(data);
+        setLoading(false);
+      }
+    } catch (error) {
+      alert(
+        "Oops! An error occurred while getting today's image for posting: " +
+          error.message
+      );
+      setLoading(false);
+    }
+  };
 
   const handleUpload = async () => {
     setLoading(true);
@@ -348,37 +390,38 @@ const UploadPage = () => {
       return (
         <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
           <h2 className="text-xl font-semibold">Submit Link</h2>
-          <form onSubmit={() => handleSubmitTodaysWork()} className="mt-4 ">
-            <div className="mb-4">
-              <label
-                htmlFor="link"
-                className="block text-gray-700 font-semibold mb-2"
-              >
-                Enter Link:
-              </label>
-              <input
-                type="text"
-                id="link"
-                value={linkValue}
-                onChange={(e) => setLinkValue(e.target.value)}
-                className="w-full p-2 border rounded"
-              />
-            </div>
-            <button
-              type="submit"
-              className={
-                linkLoading
-                  ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-blue-600"
-                  : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-              }
-              style={{ pointerEvents: linkLoading ? "none" : "auto" }}
+
+          <div className="mb-4">
+            <label
+              htmlFor="link"
+              className="block text-gray-700 font-semibold mb-2"
             >
-              {linkLoading ? "Processing..." : "Submit"}
-            </button>
-          </form>
+              Enter Link:
+            </label>
+            <input
+              type="text"
+              id="link"
+              value={linkValue}
+              onChange={(e) => setLinkValue(e.target.value)}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <button
+            // type="submit"
+            onClick={() => handleSubmitTodaysWork()}
+            disabled={linkLoading}
+            className={
+              linkLoading
+                ? "w-full bg-gray-500 text-white py-2 rounded-md hover:bg-grey-600"
+                : "w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+            }
+            style={{ pointerEvents: linkLoading ? "none" : "auto" }}
+          >
+            {linkLoading ? "Processing..." : "Submit"}
+          </button>
         </div>
       );
-    } else {
+    } else if (user && user.isAdmin == false) {
       return (
         <>
           <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
@@ -517,6 +560,21 @@ const UploadPage = () => {
           </div>
         </>
       );
+    } else {
+      return (
+        <div
+          style={{
+            //fill the screen
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          <AppLoader />
+        </div>
+      );
     }
   };
 
@@ -557,16 +615,16 @@ const UploadPage = () => {
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-          <div class="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
+          <div className="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
             <p class="left-0">
               Referral Earnings{": Kes "}
               {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
             </p>
 
-            <div class="">
+            <div className="">
               <p>
                 Earnings:{" "}
-                <span class="earnings-balance">
+                <span className="earnings-balance">
                   {": Kes "}
                   {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
                 </span>
@@ -574,8 +632,26 @@ const UploadPage = () => {
             </div>
           </div>
         </div>
-
         {getTheRightForm()}
+        <div className="mx-auto max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
+          <h2 className="text-xl font-semibold">Today's Work</h2>
+          <div className="mb-4">
+            <img
+              src={todaysWork ? todaysWork.todaysJob : moneyImage}
+              alt="Today's work"
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <a
+            href={todaysWork ? todaysWork.todaysJob : moneyImage}
+            download="todaysWork"
+            className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+            //copilot make the button pointers to be suitable for this button
+            style={{ pointerEvents: "auto", cursor: "pointer" }}
+          >
+            Download
+          </a>
+        </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>
