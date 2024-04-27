@@ -503,12 +503,12 @@ const UploadPage = () => {
               {"Wallet Balance: Ksh "}
               {result && result.message && user.walletBalance == undefined && (
                 <h2 className="text-xl font-semibold">
-                  {result ? result.walletBalance : 500}
+                  {result ? result.walletBalance : 0}
                 </h2>
               )}
               {user && user.walletBalance && (
                 <h2 className="text-xl font-semibold">
-                  {user ? user.walletBalance : 500} Ksh{" "}
+                  {user ? user.walletBalance : 0} Ksh{" "}
                 </h2>
               )}
             </div>
