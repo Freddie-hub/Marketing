@@ -150,7 +150,7 @@ export default function Navbar({ authToken, handleLogOut }) {
               href="/upload"
               className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
             >
-              Go To Working Page
+              Proceed To Working Page
             </a>
           );
         } else {
@@ -270,7 +270,7 @@ export default function Navbar({ authToken, handleLogOut }) {
             </li>
             <li className="mr-5">
               <Modal innerText="How it Works">
-                <div className="max-h-80 overflow-y-scroll px-6 py-4 border-4 border-red-500 rounded-lg animate-pulse">
+                <div className="max-h-80 overflow-y-scroll px-6 py-4 border-4 border-yellow-800 rounded-lg animate-pulse">
                   <p className="mb-4 animate-fadeIn">
                     <strong>Step 1. Sign Up as an Influencer/Champion</strong>
                     <br />
@@ -366,8 +366,65 @@ export default function Navbar({ authToken, handleLogOut }) {
             </li>
 
             <li className="mr-5">
+                <Modal innerText="How to Get Started">
+                   <div className="max-h-80 overflow-y-scroll px-6 py-4 border-4 border-yellow-800 rounded-lg animate-pulse">
+                      <p>
+                        <strong>Step 1</strong>
+                        <br/>
+                        <span>
+                          Click on Start Working on the navigation bar (You will be redirected to the log in page, select sign up)
+                        </span>
+                        <br/>
+                        <strong>Step 2</strong>
+                        <br/>
+                        <span>
+                          Enter valid details(First Name, Last Name, Valid Email, Safaricom Number, password) in the sign up form then submit
+                        </span>
+                        <br/>
+                        <strong>Step 3</strong>
+                        <br/>
+                        <span>
+                          Check your email to verify your account for log in and get your referral code(Refer people to earn ksh 100 per referral)
+                        </span>
+                        <br/>
+                        <strong>Step 4</strong>
+                        <br/>
+                        <span>
+                          Go back to home page click start working again and log in after verifying your email
+                        </span>
+                        <br/>
+                        <strong>Step 5</strong>
+                        <br/>
+                        <span>
+                          Activate Account: Click on initialize payment. You will receive an M-pesa prompt on your phone to make a payment of ksh 300 after which you will be redirected to the Working Page.<br/>
+                          The 300 shillings is credited to your account alongside an additional bonus of ksh 200
+                        </span>
+                        <br/>
+                        <strong>Step 6</strong>
+                        <br/>
+                        <span>
+                          Click on the "Proceed To Working page" button to access the work page
+                        </span>
+                        <br/>
+                        <br/>
+                        <strong className="text-bold center">How to Work and Get Paid</strong>
+                        <br/>
+                        <span>
+                          (i)Download the image from the "Product of the day" section<br/>
+                          (ii)Post the product on social platforms of your choice(Whatsapp, Instagram, Tiktok or Facebook)<br/>
+                          (iii)Collect the number of views at the end of the day<br/>
+                          (iv)Upload the number of views alongside a screenshot showing the views<br/>
+                          (v)The number of Views will be multiplied by ksh 2.5 and the balance updated in your wallet
+                        </span>
+                        <br/>
+                      </p>
+                   </div>
+                </Modal>
+            </li>
+
+            <li className="mr-5">
               <Modal innerText="FAQs">
-                <div className="max-h-80 overflow-y-scroll px-6 py-4 border-4 border-red-500 rounded-lg animate-pulse">
+                <div className="max-h-80 overflow-y-scroll px-6 py-4 border-4 border-yellow-800 rounded-lg animate-pulse">
                   <p className="mb-4 animate-fadeIn">
                     <strong className="text-blue">
                       1. How does the Pay per View (PPV) program work for
@@ -404,11 +461,11 @@ export default function Navbar({ authToken, handleLogOut }) {
                     <span className="ml-4">
                       - NO. we do not charge a sign-up fee. It is absolutely
                       free. You are however required to validate your number
-                      using 200 Ksh which will be credited/added back to your
+                      using 300 Ksh which will be credited/added back to your
                       account. This is meant to ensure that we are dealing with
                       verified people only. A sign-up bonus by R&amp;J Group of
-                      300 Ksh will also be added to your account bringing the
-                      total to 500 upon sign up.
+                      200 Ksh will also be added to your account bringing your wallet balance to 500 ksh upon sign up.
+     
                     </span>
                   </p>
                   <p className="mb-4 animate-fadeIn">
@@ -445,10 +502,11 @@ export default function Navbar({ authToken, handleLogOut }) {
                     <br />
                     <span className="ml-4">
                       - Yes, we have a minimum payout threshold at 1000 Ksh to
-                      ensure efficiency in our payment process. Once you reach
+                      ensure efficiency in our payment process. nce you reach
                       the minimum threshold, you'll receive your earnings
                       through your preferred payment method (Mobile Money or
-                      Bank) after 30 days as a normal salaried employee.
+                      Bank) after 30 days as a normal salaried employee.<br/>
+                      <strong>This does not apply to referrals as referral payments are disbursed upon requesting</strong>
                     </span>
                   </p>
                   <p className="mb-4 animate-fadeIn">
@@ -499,7 +557,7 @@ export default function Navbar({ authToken, handleLogOut }) {
                     <br />
                     <span className="ml-4">
                       Take advantage of our exciting referral program. Immediate
-                      Cash Back on every 4 referrals of 100 ksh.
+                      Cash Back on each referrals of 100 ksh.
                     </span>
                   </p>
                 </div>

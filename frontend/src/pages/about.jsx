@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/navbar";
-import aboutImage from "../assets/images/about-banner.jpg";
+import aboutImage from "../assets/images/about.jpeg";
 
 const AboutSection = () => {
   const [authToken, setAuthToken] = useState("");

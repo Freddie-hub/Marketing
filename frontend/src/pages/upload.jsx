@@ -503,12 +503,12 @@ const UploadPage = () => {
               {"Wallet Balance: Ksh "}
               {result && result.message && user.walletBalance == undefined && (
                 <h2 className="text-xl font-semibold">
-                  {result ? result.walletBalance : 0}
+                  {result ? result.walletBalance : 500}
                 </h2>
               )}
               {user && user.walletBalance && (
                 <h2 className="text-xl font-semibold">
-                  {user ? user.walletBalance : 0} Ksh{" "}
+                  {user ? user.walletBalance : 500} Ksh{" "}
                 </h2>
               )}
             </div>
@@ -619,45 +619,39 @@ const UploadPage = () => {
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-          <div className="text-orange mt-10 referral-wallet w-100 h-100 border-2 border-red-400 border-solid">
-            <p class="left-0">
-              Referral Earnings{": Kes "}
-              {user ? <p> {user.referralEarningsBalance}</p> : <p>0.0</p>}
-            </p>
-
-            {/* <div className="">
-              <p>
-                Earnings:{" "}
-                <span className="earnings-balance">
-                  {": Kes "}
-                  {user ? <p> {user.walletBalance}</p> : <p>0.0</p>}
-                </span>
-              </p>
-            </div> */}
-          </div>
+<div className="text-orange mt-10 referral-wallet w-auto max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl border-2 border-red-400 border-solid p-2 bg-gray-100 flex justify-center items-center rounded">
+  <p class="text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-800">
+    Referral Earnings: 
+    <span className="text-blue-700 m-3">
+      {user ? user.referralEarningsBalance : 0.0}
+    </span>
+  </p>
+</div>
         </div>
         {getTheRightForm()}
-        <div className="mx-auto mb-4 max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1">
-          <h2 className="text-xl font-semibold">Tomorrow's's Work</h2>
-          <div className="mb-4">
-            <img
-              src={todaysWork ? todaysWork.todaysJob : moneyImage}
-              //copilot make its size small
-              style={{ width: "10rem", height: "10rem" }}
-              alt="Today's work"
-              className="w-full p-2 border rounded"
-            />
-          </div>
-          <a
-            href={todaysWork ? todaysWork.todaysJob : moneyImage}
-            download="todaysWork"
-            className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-            //copilot make the button pointers to be suitable for this button
-            style={{ pointerEvents: "auto", cursor: "pointer" }}
-          >
-            Download
-          </a>
-        </div>
+        <div className="mx-auto mb-4 max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1 text-center">
+  <h2 className="text-xl font-semibold">Product of the day</h2>
+  <div className="mb-4">
+    <img
+      src={todaysWork ? todaysWork.todaysJob : moneyImage}
+      //copilot make its size small
+      style={{ width: "10rem", height: "10rem" }}
+      alt="Today's work"
+      className="w-full p-2 border rounded"
+    />
+  </div>
+  <a
+    href={todaysWork ? todaysWork.todaysJob : moneyImage}
+    download="todaysWork"
+    className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 inline-block"
+    //copilot make the button pointers to be suitable for this button
+    style={{ pointerEvents: "auto", cursor: "pointer" }}
+  >
+    Download
+  </a>
+</div>
+
+
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>
