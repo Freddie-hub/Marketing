@@ -230,8 +230,9 @@ const UploadPage = () => {
         }
       );
       if (response.ok) {
-        const data = await response.json();
-        alert("Operation successful!");
+        // const data = await response.json();
+        const data = await response.text();
+        alert(`Operation successful!${data}`);
         setLoading(false);
       } else {
         const data = await response.text();
@@ -283,16 +284,16 @@ const UploadPage = () => {
   const handleUpload = async () => {
     setLoading(true);
 
-    const today = new Date().toISOString().slice(0, 10);
-    const lastUploadTimestamp = localStorage.getItem(
-      `${category}_upload_timestamp`
-    );
+    // const today = new Date().toISOString().slice(0, 10);
+    // const lastUploadTimestamp = localStorage.getItem(
+    //   `${category}_upload_timestamp`
+    // );
 
-    if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
-      setError(`You have already uploaded an image for ${category} today.`);
-      setLoading(false);
-      return;
-    }
+    // if (lastUploadTimestamp && lastUploadTimestamp.includes(today)) {
+    //   setError(`You have already uploaded an image for ${category} today.`);
+    //   setLoading(false);
+    //   return;
+    // }
 
     if (!category || views === "") {
       setError("Please select category and enter valid views.");
