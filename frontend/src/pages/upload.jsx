@@ -330,7 +330,7 @@ const UploadPage = () => {
 
         // Clear inputs
         console.log("Data: ", data);
-        alert(`Operation successful! ${data}`);
+        alert(`Operation successful!`);
         setCategory("");
         setViews("");
         setScreenshot(null);
@@ -473,7 +473,7 @@ const UploadPage = () => {
                 Screenshot Proof:
               </label>
               <input
-              required
+                required
                 type="file"
                 id="screenshot"
                 onChange={handleScreenshotChange}
@@ -588,8 +588,10 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${moneyImage})` }}>
-
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${moneyImage})` }}
+    >
       <Navbar authToken={authToken} handleLogOut={handleLogOut} />
       {mpesaloading && (
         <div className="bg-white-200 bg-cover bg-center bg-blur backdrop-blur-sm bg-opacity-70 flex w-full h-full z-2 absolute">
@@ -605,7 +607,10 @@ const UploadPage = () => {
           </div>
         </div>
       )}
-      <div className="flex flex-col md:flex-row justify-between" style={{ minHeight: "81.4vh" }}>
+      <div
+        className="flex flex-col md:flex-row justify-between"
+        style={{ minHeight: "81.4vh" }}
+      >
         <div className="text-white m-4">
           {user ? (
             <p>Welcome, {user.firstName}</p>
