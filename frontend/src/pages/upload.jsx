@@ -447,6 +447,7 @@ const UploadPage = () => {
                 <option value="instagram">Instagram</option>
                 <option value="tiktok">TikTok</option>
                 <option value="facebook">Facebook</option>
+                <option value="tiktok1">TikTok1</option>
               </select>
             </div>
             <div className="mb-4">
