@@ -247,14 +247,14 @@ export default function Navbar({ authToken, handleLogOut }) {
             </svg>
           </button>
           <div className={`lg:flex items-center justify-end ${showMobileMenu ? "fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-90 flex flex-col justify-center" : "hidden"}`}>
-          <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-            <li className="mr-5">
+          <ul className={`flex flex-col lg:flex-row list-none lg:ml-auto ${showMobileMenu ? 'space-y-4 text-lg' : ''}`}>
+            <li className="mr-5 space-y-10">
               <a href="/" className="text-white">
                 Home
               </a>
             </li>
             <li className="mr-5">
-              <a href="/projects" className="text-white">
+              <a href="/projects" className="text-white ">
                 Projects
               </a>
             </li>
