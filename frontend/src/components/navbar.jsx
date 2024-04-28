@@ -107,6 +107,8 @@ export default function Navbar({ authToken, handleLogOut }) {
         }
         handleFetchUser();
         setMpesaLoading(false);
+        //reload
+        window.location.reload();
       } else {
         console.log("Stk Flopped!");
         // Handle fetch user error
