@@ -98,7 +98,7 @@ export default function Navbar({ authToken, handleLogOut }) {
       if (response.ok) {
         console.log("Stk successful!");
         const userData = await response.json();
-        console.log("Stk successful!", userData);
+        console.log("Stk successful!.................", userData);
         if (userData.Desc.includes("Cancelled")) {
           alert(
             "Seems you cancelled the payment. You have to clear it before proceeding."
@@ -113,10 +113,10 @@ export default function Navbar({ authToken, handleLogOut }) {
         console.log("Stk Flopped!");
         // Handle fetch user error
         const data = await response.text();
-        console.log("Error on stk push:", data);
+        console.log("Error on stk push:!.................", data);
         if (data.includes("503"))
           alert(
-            "Oops! Seems Mpesa service is currently unavailable. Please try again later."
+            "Seems Mpesa service is currently unavailable. Please try again later."
           );
         setMpesaLoading(false);
       }

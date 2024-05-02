@@ -178,7 +178,7 @@ const UploadPage = () => {
         console.log("Error on stk push:", data);
         if (data.includes("503"))
           alert(
-            "Oops! Seems Mpesa service is currently unavailable. Please try again later."
+            " Seems Mpesa service is currently unavailable. Please try again later."
           );
         setMpesaLoading(false);
       }
@@ -241,7 +241,7 @@ const UploadPage = () => {
       }
     } catch (error) {
       alert(
-        "Oops! An error occurred while saving views data: " + error.message
+        " An error occurred while saving views data: " + error.message
       );
       setLoading(false);
     }
@@ -274,7 +274,7 @@ const UploadPage = () => {
       }
     } catch (error) {
       alert(
-        "Oops! An error occurred while getting today's image for posting: " +
+        " An error occurred while getting today's image for posting: " +
           error.message
       );
       setLoading(false);
@@ -352,7 +352,7 @@ const UploadPage = () => {
     } catch (error) {
       setResult(null);
       alert(
-        "Oops! An error occurred while saving views data: " + error.message
+        " An error occurred while saving views data: " + error.message
       );
       setLoading(false);
     }
