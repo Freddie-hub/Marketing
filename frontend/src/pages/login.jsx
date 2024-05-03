@@ -106,7 +106,7 @@ const SignUp = ({ toggleForms }) => {
         const resultError = await response.text();
         setError(resultError);
         console.log("errrrro......", resultError);
-        alert("Oops! " + resultError);
+        alert(" " + resultError);
         if (
           resultError ==
           "Account processing was succesfull. Please check your email for verification to complete this process..."
@@ -117,7 +117,7 @@ const SignUp = ({ toggleForms }) => {
       }
     } catch (error) {
       setError(error.message);
-      alert("Oops! " + error.message);
+      alert(" " + error.message);
       console.error("Error Loging in:", error.message);
     }
   };

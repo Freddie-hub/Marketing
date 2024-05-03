@@ -21,20 +21,20 @@ const UploadPage = () => {
   const [authToken, setAuthToken] = useState();
   const [withdrawalType, setWithdrawalType] = useState("monthly");
   const [withdrawalAmount, setWithdrawalAmount] = useState("");
+  const [dummyPic, setDummyPic] = useState("");
 
   useEffect(() => {
     // Check if the token exists in localStorage
     const authenticatedToken = localStorage.getItem("auth_token");
     if (authenticatedToken) {
       setAuthToken(authenticatedToken);
-      handleFetchUser();
-      handleGetTodaysWork();
+      handleFetchUser(authenticatedToken);
     } else {
       setAuthToken("");
     }
   }, []);
 
-  const handleFetchUser = async () => {
+  const handleFetchUser = async (authenticatedToken) => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -52,6 +52,7 @@ const UploadPage = () => {
         const userData = await response.json();
         console.log("User fetch successful!", userData);
         setUser(userData);
+        await handleGetTodaysWork(authenticatedToken);
         setLoading(false);
       } else {
         // Handle fetch user error
@@ -178,7 +179,7 @@ const UploadPage = () => {
         console.log("Error on stk push:", data);
         if (data.includes("503"))
           alert(
-            "Oops! Seems Mpesa service is currently unavailable. Please try again later."
+            " Seems Mpesa service is currently unavailable. Please try again later."
           );
         setMpesaLoading(false);
       }
@@ -197,6 +198,7 @@ const UploadPage = () => {
   };
 
   const getSavedToken = () => {
+    setAuthToken;
     return localStorage.getItem("auth_token");
   };
 
@@ -236,26 +238,28 @@ const UploadPage = () => {
         setLoading(false);
       } else {
         const data = await response.text();
+
         alert(data);
         setLoading(false);
       }
     } catch (error) {
-      alert(
-        "Oops! An error occurred while saving views data: " + error.message
-      );
+      alert(" An error occurred while saving views data: " + error.message);
       setLoading(false);
     }
   };
-  const handleGetTodaysWork = async () => {
+  const handleGetTodaysWork = async (authenticatedToken) => {
     setLoading(true);
     try {
+      console.log("Getting today's work....");
+      if (!authenticatedToken) return;
+      console.log("we are authed...", authenticatedToken);
       const response = await fetch(
         "https://rnrclone.onrender.com/api/users/getTodaysWork",
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("auth_token"),
+            "x-auth-token": authenticatedToken,
           },
         }
       );
@@ -269,12 +273,15 @@ const UploadPage = () => {
         setLoading(false);
       } else {
         const data = await response.text();
+        setDummyPic(
+          "https://freefrontend.com/assets/img/html-funny-404-pages/CodePen-404-Page.png"
+        );
         alert(data);
         setLoading(false);
       }
     } catch (error) {
       alert(
-        "Oops! An error occurred while getting today's image for posting: " +
+        " An error occurred while getting today's image for posting: " +
           error.message
       );
       setLoading(false);
@@ -351,9 +358,7 @@ const UploadPage = () => {
       }
     } catch (error) {
       setResult(null);
-      alert(
-        "Oops! An error occurred while saving views data: " + error.message
-      );
+      alert(" An error occurred while saving views data: " + error.message);
       setLoading(false);
     }
   };
@@ -620,39 +625,47 @@ const UploadPage = () => {
           ) : (
             <p>Welcome to the Upload Page</p>
           )}
-<div className="text-orange mt-10 referral-wallet w-auto max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl border-2 border-red-400 border-solid p-2 bg-gray-100 flex justify-center items-center rounded">
-  <p class="text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-800">
-    Referral Earnings: 
-    <span className="text-blue-700 m-3">
-      {user ? user.referralEarningsBalance : 0.0}
-    </span>
-  </p>
-</div>
+          <div className="text-orange mt-10 referral-wallet w-auto max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl border-2 border-red-400 border-solid p-2 bg-gray-100 flex justify-center items-center rounded">
+            <p class="text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-800">
+              Referral Earnings:
+              <span className="text-blue-700 m-3">
+                {user ? user.referralEarningsBalance : 0.0}
+              </span>
+            </p>
+          </div>
         </div>
         {getTheRightForm()}
         <div className="mx-auto mb-4 max-w-md p-6 mt-2 bg-gray-100 rounded-lg shadow-md z-1 text-center">
-  <h2 className="text-xl font-semibold">Product of the day</h2>
-  <div className="mb-4">
-    <img
-      src={todaysWork ? todaysWork.todaysJob : moneyImage}
-      //copilot make its size small
-      style={{ width: "10rem", height: "10rem" }}
-      alt="Today's work"
-      className="w-full p-2 border rounded"
-    />
-  </div>
-  <a
-    href={todaysWork ? todaysWork.todaysJob : moneyImage}
-    download="todaysWork"
-    className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 inline-block"
-    //copilot make the button pointers to be suitable for this button
-    style={{ pointerEvents: "auto", cursor: "pointer" }}
-  >
-    Download
-  </a>
-</div>
-
-
+          <h2 className="text-xl font-semibold">Product of the day</h2>
+          <div className="mb-4">
+            {!todaysWork && (
+              <p className="text-blue-500 font-semibold">
+                Nothing has been uploaded yet for work, once there is an update
+                you'll find it here.
+              </p>
+            )}
+            {todaysWork && (
+              <img
+                src={todaysWork ? todaysWork.todaysJob : dummyPic}
+                //copilot make its size small
+                style={{ width: "10rem", height: "10rem" }}
+                alt="Today's work"
+                className="w-full p-2 border rounded"
+              />
+            )}
+          </div>
+          {todaysWork && (
+            <a
+              href={todaysWork ? todaysWork.todaysJob : ""}
+              download="todaysWork"
+              className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 inline-block"
+              //copilot make the button pointers to be suitable for this button
+              style={{ pointerEvents: "auto", cursor: "pointer" }}
+            >
+              Download
+            </a>
+          )}
+        </div>
       </div>
       <footer className="bg-gray-800 text-white text-center py-4">
         <p>
