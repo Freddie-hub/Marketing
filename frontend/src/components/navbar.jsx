@@ -56,13 +56,13 @@ export default function Navbar({ authToken, handleLogOut }) {
       }
     } catch (error) {
       // alert("Error fetching user details: " + error.message);
-      alert(
-        "We experienced an error on your account. We will need you to login."
-      );
-      navigate("/login");
+      // alert(
+      //   "We experienced an error on your account. We will need you to login."
+      // );
       console.error("Error fetching user details:", error.message);
       setUserloading(false);
       setLoading(false);
+      navigate("/login");
     }
   };
 
