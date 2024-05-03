@@ -200,7 +200,7 @@ const UploadPage = () => {
     return localStorage.getItem("auth_token");
   };
 
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = (e) => { 
     setCategory(e.target.value);
   };
 
@@ -448,7 +448,7 @@ const UploadPage = () => {
                 <option value="instagram">Instagram</option>
                 <option value="tiktok">TikTok</option>
                 <option value="facebook">Facebook</option>
-                <option value="tiktok1">TikTok1</option>
+                {/* <option value="tiktok1">TikTok1</option> */}
               </select>
             </div>
             <div className="mb-4">
@@ -472,6 +472,7 @@ const UploadPage = () => {
                 htmlFor="screenshot"
                 className="block text-gray-700 font-semibold mb-2"
               >
+                <strong>Make sure the views you enter correspond with the views on the screenshot. Dishonesty will lead to termination of your account and consequently lose all earnings</strong>
                 Screenshot Proof:
               </label>
               <input
