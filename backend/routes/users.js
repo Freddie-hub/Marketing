@@ -96,13 +96,13 @@ router.put("/updateWallet", auth, async (req, res) => {
   const selectedCategory = req.body.category.toLowerCase();
   let viewsValue = 0;
   if (selectedCategory == "whatsapp") {
-    viewsValue = 0.5;
+    viewsValue = 2.5;
   } else if (selectedCategory == "facebook") {
-    viewsValue = 0.35;
+    viewsValue = 2.5;
   } else if (selectedCategory == "instagram" || selectedCategory == "twitter") {
-    viewsValue = 0.2;
+    viewsValue = 2.5;
   } else if (selectedCategory == "tiktok") {
-    viewsValue = 0.1;
+    viewsValue = 2.5;
   }
 
   const views = req.body.views;
