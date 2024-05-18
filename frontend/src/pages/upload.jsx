@@ -3,6 +3,7 @@ import Navbar from "../components/navbar";
 import AppLoader from "../components/AppLoader";
 import { useNavigate } from "react-router-dom";
 import moneyImage from "../assets/images/money.jpeg";
+import API_URL from "../config/apiConfig";
 
 const UploadPage = () => {
   const [category, setCategory] = useState("");
@@ -37,16 +38,13 @@ const UploadPage = () => {
   const handleFetchUser = async (authenticatedToken) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/me",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/users/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+      });
 
       if (response.ok) {
         const userData = await response.json();
@@ -76,19 +74,16 @@ const UploadPage = () => {
     }
     setLinkloading(true);
     try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/updateTodaysWork",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-          body: JSON.stringify({
-            adminImgForWorkLink: linkValue,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/users/updateTodaysWork`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+        body: JSON.stringify({
+          adminImgForWorkLink: linkValue,
+        }),
+      });
       if (response.ok) {
         const userData = await response.json();
         console.log("Link for today's work updated accordingly!", userData);
@@ -115,20 +110,18 @@ const UploadPage = () => {
       setLoading(false);
     }
   };
+
   //call server to do handleRequestPayment
   const handleRequestPayment = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/requestPayment",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/users/requestPayment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+      });
 
       if (response.ok) {
         const resp = await response.text();
@@ -153,19 +146,16 @@ const UploadPage = () => {
     try {
       const clientPhoneNumber = formatPhoneNumber(user.phoneNumber);
       console.log("User Number...........", clientPhoneNumber);
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/stkPush",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-          body: JSON.stringify({
-            ClientPhoneNumber: clientPhoneNumber,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/users/stkPush`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+        body: JSON.stringify({
+          ClientPhoneNumber: clientPhoneNumber,
+        }),
+      });
 
       if (response.ok) {
         console.log("Stk successful!");
@@ -221,16 +211,13 @@ const UploadPage = () => {
   const handleAlertOwnerToPayWorker = async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/requestPayment",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("auth_token"),
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/users/requestPayment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.getItem("auth_token"),
+        },
+      });
       if (response.ok) {
         // const data = await response.json();
         const data = await response.text();
@@ -253,16 +240,13 @@ const UploadPage = () => {
       console.log("Getting today's work....");
       if (!authenticatedToken) return;
       console.log("we are authed...", authenticatedToken);
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/getTodaysWork",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": authenticatedToken,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/users/getTodaysWork`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": authenticatedToken,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setTodaysWork(data);
@@ -315,17 +299,14 @@ const UploadPage = () => {
 
     try {
       console.log("Uploading...", category, " Views: ", views);
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/updateWallet",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.getItem("auth_token"),
-          },
-          body: JSON.stringify({ category, views }),
-        }
-      );
+      const response = await fetch(`${API_URL}/users/updateWallet`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.getItem("auth_token"),
+        },
+        body: JSON.stringify({ category, views }),
+      });
       if (response.ok) {
         const data = await response.json();
         setResult(data);

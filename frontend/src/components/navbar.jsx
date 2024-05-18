@@ -3,6 +3,7 @@ import Modal from "./modal";
 import { CircleUserRound } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppLoader from "./AppLoader";
+import API_URL from "../config/apiConfig";
 
 export default function Navbar({ authToken, handleLogOut }) {
   //make state for showing User Profile
@@ -27,16 +28,13 @@ export default function Navbar({ authToken, handleLogOut }) {
     setUserloading(true);
     setUser(null);
     try {
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/me",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}//users/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+      });
 
       if (response.ok) {
         const userData = await response.json();
@@ -83,17 +81,14 @@ export default function Navbar({ authToken, handleLogOut }) {
     try {
       const clientPhoneNumber = formatPhoneNumber(user.phoneNumber);
       console.log("User Number...........", clientPhoneNumber);
-      const response = await fetch(
-        "https://rnrclone.onrender.com/api/users/stkPush",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": `${getSavedToken()}`,
-          },
-          body: JSON.stringify(generateCorrectRequestBody(clientPhoneNumber)),
-        }
-      );
+      const response = await fetch(`${API_URL}/users/stkPush`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": `${getSavedToken()}`,
+        },
+        body: JSON.stringify(generateCorrectRequestBody(clientPhoneNumber)),
+      });
 
       if (response.ok) {
         console.log("Stk successful!");

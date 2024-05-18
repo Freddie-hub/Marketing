@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./spinner.css";
+import API_URL from "../config/apiConfig";
 
 // Sign Up Component
 const SignUp = ({ toggleForms }) => {
@@ -28,7 +29,7 @@ const SignUp = ({ toggleForms }) => {
     };
 
     try {
-      const response = await fetch("https://rnrclone.onrender.com/api/users", {
+      const response = await fetch(`${API_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +82,7 @@ const SignUp = ({ toggleForms }) => {
     };
 
     try {
-      const response = await fetch("https://rnrclone.onrender.com/api/auth", {
+      const response = await fetch(`${API_URL}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +255,7 @@ const Login = ({ toggleForms }) => {
     };
 
     try {
-      const response = await fetch("https://rnrclone.onrender.com/api/auth", {
+      const response = await fetch(`${API_URL}/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
