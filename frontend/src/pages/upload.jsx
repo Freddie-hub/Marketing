@@ -192,7 +192,7 @@ const UploadPage = () => {
     return localStorage.getItem("auth_token");
   };
 
-  const handleCategoryChange = (e) => {
+  const handleCategoryChange = (e) => { 
     setCategory(e.target.value);
   };
 
@@ -206,6 +206,10 @@ const UploadPage = () => {
   const handleScreenshotChange = (e) => {
     const file = e.target.files[0];
     setScreenshot(file);
+  };
+
+  const displayMessage = () => {
+    setShowProcessingMessage(true);
   };
 
   const handleAlertOwnerToPayWorker = async () => {
@@ -359,6 +363,7 @@ const UploadPage = () => {
     e.preventDefault();
     setLoading(true);
 
+
     try {
       if (withdrawalType === "monthly") {
         alert("Payments will be disbursed after every 30 days.");
@@ -367,6 +372,7 @@ const UploadPage = () => {
         // Make API call with withdrawalAmount
         handleRequestPayment();
         setLoading(false);
+        alert("Request successful. Payments will be disbursed to your M-pesa once your request is verified")
       }
     } catch (error) {
       alert("An error occurred while processing withdrawal: " + error.message);
@@ -434,7 +440,7 @@ const UploadPage = () => {
                 <option value="instagram">Instagram</option>
                 <option value="tiktok">TikTok</option>
                 <option value="facebook">Facebook</option>
-                <option value="tiktok1">TikTok1</option>
+                {/* <option value="tiktok1">TikTok1</option> */}
               </select>
             </div>
             <div className="mb-4">
@@ -453,20 +459,24 @@ const UploadPage = () => {
                 className="w-full p-2 border rounded"
               />
             </div>
-            <div className="mb-4">
+            <div className="mb-4 text-red-700">
+            <strong>Make sure the views you enter correspond with the views on the screenshot. Dishonesty will lead to termination of your account and consequently lose all earnings</strong><br/>
               <label
                 htmlFor="screenshot"
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-gray-700 font-semibold mb-2 mt-3"
               >
+                
                 Screenshot Proof:
               </label>
               <input
+           
                 required
                 type="file"
                 id="screenshot"
                 onChange={handleScreenshotChange}
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-gray-700"
               />
+              <p className="text-gray-700 mt-3"><strong>Refresh upon uploading to update your wallet balance</strong> </p>
             </div>
             <button
               onClick={handleUpload}
@@ -533,10 +543,13 @@ const UploadPage = () => {
                     value={withdrawalAmount}
                     onChange={handleWithdrawalAmountChange}
                     className="w-full p-2 border rounded"
+                    required
+        
                   />
                 </div>
               )}
               <button
+                onClick={displayMessage}
                 type="submit"
                 className={
                   loading
