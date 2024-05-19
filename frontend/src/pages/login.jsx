@@ -352,7 +352,7 @@ const Login = ({ toggleForms }) => {
           </button>
         </p>
         <p className="text-center">
-          <a href="#" className="text-blue-500 hover:underline">
+          <a href="/forgot-password" className="text-blue-500 hover:underline">
             Forgot Password?
           </a>
         </p>

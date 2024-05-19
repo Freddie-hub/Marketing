@@ -28,7 +28,7 @@ export default function Navbar({ authToken, handleLogOut }) {
     setUserloading(true);
     setUser(null);
     try {
-      const response = await fetch(`${API_URL}//users/me`, {
+      const response = await fetch(`${API_URL}/users/me`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
